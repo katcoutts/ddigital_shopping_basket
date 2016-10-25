@@ -146,6 +146,13 @@ describe( "ShoppingBasket", function() {
     assert.equal(138.99, shoppingBasket.total.toFixed(2));
   })
 
+  it("will not apply discount if item requirement met but spend not met", function(){
+    shoppingBasket.add(flipFlops);
+    assert.equal(19.00, shoppingBasket.total.toFixed(2));
+    shoppingBasket.checkDiscountEligible(fifteenDiscount);
+    assert.equal(19.00, shoppingBasket.total.toFixed(2));
+  })
+
 
 
 
