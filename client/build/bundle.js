@@ -37064,12 +37064,13 @@
 /* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(167);
 	
 	var ItemDetail = React.createClass({
-	  displayName: "ItemDetail",
+	  displayName: 'ItemDetail',
 	
 	
 	  getInitialState: function getInitialState() {
@@ -37081,35 +37082,36 @@
 	
 	  render: function render() {
 	
-	    var saleInfo = this.props.item.salePrice;
-	    if (!this.props.item.salePrice) {
-	      saleInfo = " ";
+	    var saleInfo = " ";
+	    if (this.props.item.salePrice) {
+	      saleInfo = this.props.item.salePrice;
+	      var classes = classNames("onSale");
 	    }
 	
 	    return React.createElement(
-	      "div",
-	      null,
+	      'div',
+	      { id: 'clothingItem' },
 	      React.createElement(
-	        "h4",
+	        'h4',
 	        { id: this.props.item.id },
 	        this.props.item.name
 	      ),
 	      React.createElement(
-	        "h5",
-	        null,
-	        "Price: ",
-	        this.props.item.price
+	        'h5',
+	        { className: classes },
+	        'Price: \xA3',
+	        this.props.item.price.toFixed(2)
 	      ),
 	      React.createElement(
-	        "h5",
+	        'h5',
 	        null,
-	        "Sale Price: ",
+	        'Sale Price: \xA3',
 	        saleInfo
 	      ),
 	      React.createElement(
-	        "button",
+	        'button',
 	        { value: this.props.item },
-	        "Add to basket"
+	        'Add to basket'
 	      )
 	    );
 	  }
@@ -37117,6 +37119,60 @@
 	});
 	
 	module.exports = ItemDetail;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);
