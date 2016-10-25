@@ -68,7 +68,18 @@ describe( "ShoppingBasket", function() {
     "price": 99.00,
     "salePrice": null,
     "stockQuantity": 5
-    })   
+    });
+    waistcoat = new ShoppingItem ({
+      "id": 10,
+      "name": "Sharkskin Waistcoat",
+      "colour": "Charcoal",
+      "category": "Men's Formalwear",
+      "type": "formalwear",
+      "gender": "men",
+      "price": 75.00,
+      "salePrice": null,
+      "stockQuantity": 2
+    })
   })
 
   it("should start empty", function(){
@@ -140,10 +151,10 @@ describe( "ShoppingBasket", function() {
 
   it("won't apply discount if spend met but item requirements not met", function(){
     shoppingBasket.add(shirt);
-    shoppingBasket.add(courtShoes);
-    assert.equal(138.99, shoppingBasket.total.toFixed(2));
+    shoppingBasket.add(waistcoat);
+    assert.equal(114.99, shoppingBasket.total.toFixed(2));
     shoppingBasket.checkDiscountEligible(fifteenDiscount);
-    assert.equal(138.99, shoppingBasket.total.toFixed(2));
+    assert.equal(114.99, shoppingBasket.total.toFixed(2));
   })
 
   it("will not apply discount if item requirement met but spend not met", function(){

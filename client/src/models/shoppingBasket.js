@@ -79,20 +79,33 @@ ShoppingBasket.prototype = {
         this.checkSpendMet(discount)
         return 
         }
-        else {
-          return false
+      }
+    }
+      return false
+  },
+
+  checkItemRequirementMet2: function(discount){
+    var response = false;
+    if (discount.itemRequirement.length === 0){
+      response = true
+    }
+    var items = this.items;
+    for (var requirement of discount.itemRequirement){  
+      for (var item of items) {
+        if (requirement === item.type){
+        response = true;
         }
       }
     }
+    return response
   },
 
   checkSpendMet: function(discount){
     if (this.total > discount.priceLimit) {
       this.applyDiscount(discount)
+      return
     }
-    else {
-      return false
-    }
+    return false
   }, 
 
 

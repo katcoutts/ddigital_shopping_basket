@@ -24,10 +24,12 @@ var VoucherBox = React.createClass({
     if (!voucher){
       var element = document.querySelector('#error-message1');
       element.innerText = "Voucher code not recognised"
+      return
     }
     console.log("voucher is", voucher)
     // debugger;
     this.props.submitVoucher(voucher)
+    
   },
 
   componentWillReceiveProps: function(nextProps){

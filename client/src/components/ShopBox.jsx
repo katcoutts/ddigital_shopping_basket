@@ -82,16 +82,19 @@ var ShopBox = React.createClass({
   },
 
   handleVoucher: function(voucher){
-    if (this.state.shoppingBasket.checkItemRequirementMet(voucher) === false){
-      this.setState({error: "You have not bought the appropriate items to use this voucher"});
+    console.log("this.state.total", this.state.total)
+    console.log("voucher.priceLimit", voucher.priceLimit)
+    if (this.state.shoppingTotal < voucher.priceLimit){
+      this.setState({error: "You have not spent enough to redeem this voucher"});
       return
     }
-    if (this.state.shoppingBasket.checkSpendMet(voucher) === false){
-      this.setState({error: "You have not spent enough to redeem this voucher"});
+    else if (!this.state.shoppingBasket.checkItemRequirementMet2(voucher)){
+      this.setState({error: "You have not bought the appropriate items to use this voucher"});
       return
     }
     this.state.shoppingBasket.checkDiscountEligible(voucher);
     this.setState({shoppingTotal: this.state.shoppingBasket.total});
+    this.setState({error: ""});
     console.log("error message in shop box is", this.state.error)
   },
 

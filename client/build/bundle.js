@@ -19758,11 +19758,11 @@
 	var ShoppingBasket = __webpack_require__(160);
 	var ShoppingItem = __webpack_require__(161);
 	var DiscountVoucher = __webpack_require__(162);
-	var ShoppingItemList = __webpack_require__(165);
-	var BasketBriefDetails = __webpack_require__(168);
-	var BasketList = __webpack_require__(169);
-	var VoucherBox = __webpack_require__(172);
-	var _ = __webpack_require__(163);
+	var ShoppingItemList = __webpack_require__(163);
+	var BasketBriefDetails = __webpack_require__(166);
+	var BasketList = __webpack_require__(167);
+	var VoucherBox = __webpack_require__(170);
+	var _ = __webpack_require__(171);
 	
 	var ShopBox = React.createClass({
 	  displayName: 'ShopBox',
@@ -19862,16 +19862,18 @@
 	  },
 	
 	  handleVoucher: function handleVoucher(voucher) {
-	    if (this.state.shoppingBasket.checkItemRequirementMet(voucher) === false) {
-	      this.setState({ error: "You have not bought the appropriate items to use this voucher" });
-	      return;
-	    }
-	    if (this.state.shoppingBasket.checkSpendMet(voucher) === false) {
+	    console.log("this.state.total", this.state.total);
+	    console.log("voucher.priceLimit", voucher.priceLimit);
+	    if (this.state.shoppingTotal < voucher.priceLimit) {
 	      this.setState({ error: "You have not spent enough to redeem this voucher" });
+	      return;
+	    } else if (!this.state.shoppingBasket.checkItemRequirementMet2(voucher)) {
+	      this.setState({ error: "You have not bought the appropriate items to use this voucher" });
 	      return;
 	    }
 	    this.state.shoppingBasket.checkDiscountEligible(voucher);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
+	    this.setState({ error: "" });
 	    console.log("error message in shop box is", this.state.error);
 	  },
 	
@@ -19904,7 +19906,7 @@
 	
 	var shoppingItem = __webpack_require__(161);
 	var discountVoucher = __webpack_require__(162);
-	var _ = __webpack_require__(163);
+	var _ = __webpack_require__(171);
 	
 	var ShoppingBasket = function ShoppingBasket() {
 	  this.items = [], this.total = 0;
@@ -20030,8 +20032,6 @@
 	            if (requirement === item.type) {
 	              this.checkSpendMet(discount);
 	              return;
-	            } else {
-	              return false;
 	            }
 	          }
 	        } catch (err) {
@@ -20063,14 +20063,74 @@
 	        }
 	      }
 	    }
+	
+	    return false;
+	  },
+	
+	  checkItemRequirementMet2: function checkItemRequirementMet2(discount) {
+	    var response = false;
+	    if (discount.itemRequirement.length === 0) {
+	      response = true;
+	    }
+	    var items = this.items;
+	    var _iteratorNormalCompletion5 = true;
+	    var _didIteratorError5 = false;
+	    var _iteratorError5 = undefined;
+	
+	    try {
+	      for (var _iterator5 = discount.itemRequirement[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	        var requirement = _step5.value;
+	        var _iteratorNormalCompletion6 = true;
+	        var _didIteratorError6 = false;
+	        var _iteratorError6 = undefined;
+	
+	        try {
+	          for (var _iterator6 = items[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	            var item = _step6.value;
+	
+	            if (requirement === item.type) {
+	              response = true;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError6 = true;
+	          _iteratorError6 = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	              _iterator6.return();
+	            }
+	          } finally {
+	            if (_didIteratorError6) {
+	              throw _iteratorError6;
+	            }
+	          }
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError5 = true;
+	      _iteratorError5 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	          _iterator5.return();
+	        }
+	      } finally {
+	        if (_didIteratorError5) {
+	          throw _iteratorError5;
+	        }
+	      }
+	    }
+	
+	    return response;
 	  },
 	
 	  checkSpendMet: function checkSpendMet(discount) {
 	    if (this.total > discount.priceLimit) {
 	      this.applyDiscount(discount);
-	    } else {
-	      return false;
+	      return;
 	    }
+	    return false;
 	  },
 	
 	  applyDiscount: function applyDiscount(discount) {
@@ -20107,6 +20167,475 @@
 
 /***/ },
 /* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ItemDetail = __webpack_require__(164);
+	var ShoppingBasket = __webpack_require__(160);
+	
+	var ShoppingItemList = React.createClass({
+	  displayName: 'ShoppingItemList',
+	
+	
+	  render: function render() {
+	    var clothing = this.props.items;
+	
+	    var clothingList = clothing.map(function (clothing, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        React.createElement(ItemDetail, { item: clothing, buyItem: this.props.buyItem })
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'clothing-list' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        clothingList
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ShoppingItemList;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(165);
+	var ShoppingBasket = __webpack_require__(160);
+	
+	var ItemDetail = React.createClass({
+	  displayName: 'ItemDetail',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return {};
+	  },
+	
+	  render: function render() {
+	
+	    var saleInfo = " ";
+	    if (this.props.item.salePrice) {
+	      saleInfo = this.props.item.salePrice;
+	      var classes = classNames("onSale");
+	      var classes2 = classNames("salePrice");
+	    }
+	
+	    var inStock = "Yes";
+	    if (!this.props.item.stockQuantity) {
+	      inStock = "No";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { id: 'clothingItem' },
+	      React.createElement(
+	        'div',
+	        { id: 'itemDetails' },
+	        React.createElement(
+	          'h4',
+	          { id: this.props.item.id },
+	          this.props.item.name
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Colour: ',
+	          this.props.item.colour
+	        ),
+	        React.createElement(
+	          'h5',
+	          { className: classes },
+	          'Price: \xA3',
+	          this.props.item.price.toFixed(2)
+	        ),
+	        React.createElement(
+	          'h5',
+	          { className: classes2 },
+	          'Sale Price: \xA3',
+	          saleInfo
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'In Stock: ',
+	          inStock
+	        )
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'item-button', value: this.props.item.id, onClick: this.props.buyItem },
+	        'Add to basket'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ItemDetail;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var BasketBriefDetails = function BasketBriefDetails(props) {
+	
+	  return React.createElement(
+	    "div",
+	    { id: "basket-details" },
+	    React.createElement(
+	      "p",
+	      null,
+	      "Basket"
+	    ),
+	    React.createElement(
+	      "p",
+	      null,
+	      "Items in basket: ",
+	      props.items
+	    ),
+	    React.createElement(
+	      "p",
+	      null,
+	      "Basket total: \xA3",
+	      props.total.toFixed(2),
+	      " "
+	    )
+	  );
+	};
+	
+	module.exports = BasketBriefDetails;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ShoppingBasket = __webpack_require__(160);
+	var BasketItemDetail = __webpack_require__(168);
+	var BasketTotal = __webpack_require__(169);
+	
+	var BasketList = React.createClass({
+	  displayName: 'BasketList',
+	
+	
+	  render: function render() {
+	
+	    var boughtItems = this.props.shoppingBasket.items;
+	    console.log("BasketDetails", this.props.shoppingBasket);
+	
+	    var boughtList = boughtItems.map(function (boughtItem, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        React.createElement(BasketItemDetail, { item: boughtItem, removeItem: this.props.removeItem })
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'item-basket' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Shopping Basket'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        boughtList
+	      ),
+	      React.createElement(BasketTotal, { total: this.props.total, itemNumber: this.props.items, discountVouchers: this.props.discountVouchers })
+	    );
+	  }
+	
+	});
+	
+	module.exports = BasketList;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(165);
+	var ShoppingBasket = __webpack_require__(160);
+	
+	var BasketItemDetail = React.createClass({
+	  displayName: 'BasketItemDetail',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return {};
+	  },
+	
+	  render: function render() {
+	
+	    console.log("basket item detail", this.props.item);
+	
+	    var cost = this.props.item.price;
+	    if (this.props.item.salePrice) {
+	      cost = this.props.item.salePrice;
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { id: 'basketItemDetail' },
+	      React.createElement(
+	        'div',
+	        { id: 'basket-item-text' },
+	        React.createElement(
+	          'h4',
+	          { id: this.props.item.id },
+	          this.props.item.name
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Colour: ',
+	          this.props.item.colour
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Price: \xA3',
+	          cost
+	        )
+	      ),
+	      React.createElement(
+	        'button',
+	        { id: 'basket-remove-button', value: this.props.item.id, onClick: this.props.removeItem },
+	        'Remove'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = BasketItemDetail;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var BasketTotal = function BasketTotal(props) {
+	
+	  console.log("BasketTotal total", props.total);
+	
+	  if (!props.itemNumber) {
+	    return React.createElement("p", null);
+	  }
+	
+	  return React.createElement(
+	    "div",
+	    null,
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Total items in basket: ",
+	      props.itemNumber
+	    ),
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Total before discounts: \xA3",
+	      props.total.toFixed(2),
+	      " "
+	    )
+	  );
+	};
+	
+	module.exports = BasketTotal;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(165);
+	
+	var VoucherBox = React.createClass({
+	  displayName: 'VoucherBox',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      errorMessage: ""
+	    };
+	  },
+	
+	  handleVoucherClick: function handleVoucherClick() {
+	    console.log("this handle click in voucher box called");
+	    var input = document.querySelector('#voucher-input');
+	    console.log("input value is", input.value);
+	    var voucher = null;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = this.props.discountVouchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var item = _step.value;
+	
+	        if (item.code === input.value) {
+	          voucher = item;
+	          var element = document.querySelector('#error-message1');
+	          element.innerText = " ";
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    if (!voucher) {
+	      var element = document.querySelector('#error-message1');
+	      element.innerText = "Voucher code not recognised";
+	      return;
+	    }
+	    console.log("voucher is", voucher);
+	    // debugger;
+	    this.props.submitVoucher(voucher);
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    console.log("component will receive props called");
+	    this.setState({
+	      errorMessage: nextProps.errorMessage
+	    });
+	  },
+	
+	  render: function render() {
+	
+	    console.log("voucherBox", this.props.discountVouchers);
+	    if (!this.props.discountVouchers) {
+	      return React.createElement('p', null);
+	    }
+	
+	    console.log("voucher box error message is", this.props.errorMessage);
+	    // var errorMessage = this.state.errorMessage;
+	    // if (!this.state.errorMessage){
+	    //   errorMessage = "";
+	    // }
+	
+	    return React.createElement(
+	      'div',
+	      { id: 'voucher-box' },
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Enter voucher code:'
+	      ),
+	      React.createElement('input', { id: 'voucher-input', type: 'text' }),
+	      React.createElement(
+	        'button',
+	        { onClick: this.handleVoucherClick },
+	        'Submit'
+	      ),
+	      React.createElement('h5', { id: 'error-message1' }),
+	      React.createElement(
+	        'h5',
+	        null,
+	        this.state.errorMessage
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = VoucherBox;
+
+/***/ },
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -37092,10 +37621,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(164)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(172)(module)))
 
 /***/ },
-/* 164 */
+/* 172 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -37109,474 +37638,6 @@
 		return module;
 	}
 
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ItemDetail = __webpack_require__(166);
-	var ShoppingBasket = __webpack_require__(160);
-	
-	var ShoppingItemList = React.createClass({
-	  displayName: 'ShoppingItemList',
-	
-	
-	  render: function render() {
-	    var clothing = this.props.items;
-	
-	    var clothingList = clothing.map(function (clothing, index) {
-	      return React.createElement(
-	        'li',
-	        { key: index },
-	        React.createElement(ItemDetail, { item: clothing, buyItem: this.props.buyItem })
-	      );
-	    }.bind(this));
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'clothing-list' },
-	      React.createElement(
-	        'ul',
-	        null,
-	        clothingList
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = ShoppingItemList;
-
-/***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var classNames = __webpack_require__(167);
-	var ShoppingBasket = __webpack_require__(160);
-	
-	var ItemDetail = React.createClass({
-	  displayName: 'ItemDetail',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return {};
-	  },
-	
-	  render: function render() {
-	
-	    var saleInfo = " ";
-	    if (this.props.item.salePrice) {
-	      saleInfo = this.props.item.salePrice;
-	      var classes = classNames("onSale");
-	      var classes2 = classNames("salePrice");
-	    }
-	
-	    var inStock = "Yes";
-	    if (!this.props.item.stockQuantity) {
-	      inStock = "No";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { id: 'clothingItem' },
-	      React.createElement(
-	        'div',
-	        { id: 'itemDetails' },
-	        React.createElement(
-	          'h4',
-	          { id: this.props.item.id },
-	          this.props.item.name
-	        ),
-	        React.createElement(
-	          'h5',
-	          null,
-	          'Colour: ',
-	          this.props.item.colour
-	        ),
-	        React.createElement(
-	          'h5',
-	          { className: classes },
-	          'Price: \xA3',
-	          this.props.item.price.toFixed(2)
-	        ),
-	        React.createElement(
-	          'h5',
-	          { className: classes2 },
-	          'Sale Price: \xA3',
-	          saleInfo
-	        ),
-	        React.createElement(
-	          'h5',
-	          null,
-	          'In Stock: ',
-	          inStock
-	        )
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: 'item-button', value: this.props.item.id, onClick: this.props.buyItem },
-	        'Add to basket'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = ItemDetail;
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-	
-	(function () {
-		'use strict';
-	
-		var hasOwn = {}.hasOwnProperty;
-	
-		function classNames () {
-			var classes = [];
-	
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-	
-				var argType = typeof arg;
-	
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-	
-			return classes.join(' ');
-		}
-	
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	
-	var BasketBriefDetails = function BasketBriefDetails(props) {
-	
-	  return React.createElement(
-	    "div",
-	    { id: "basket-details" },
-	    React.createElement(
-	      "p",
-	      null,
-	      "Basket"
-	    ),
-	    React.createElement(
-	      "p",
-	      null,
-	      "Items in basket: ",
-	      props.items
-	    ),
-	    React.createElement(
-	      "p",
-	      null,
-	      "Basket total: \xA3",
-	      props.total.toFixed(2),
-	      " "
-	    )
-	  );
-	};
-	
-	module.exports = BasketBriefDetails;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ShoppingBasket = __webpack_require__(160);
-	var BasketItemDetail = __webpack_require__(170);
-	var BasketTotal = __webpack_require__(171);
-	
-	var BasketList = React.createClass({
-	  displayName: 'BasketList',
-	
-	
-	  render: function render() {
-	
-	    var boughtItems = this.props.shoppingBasket.items;
-	    console.log("BasketDetails", this.props.shoppingBasket);
-	
-	    var boughtList = boughtItems.map(function (boughtItem, index) {
-	      return React.createElement(
-	        'li',
-	        { key: index },
-	        React.createElement(BasketItemDetail, { item: boughtItem, removeItem: this.props.removeItem })
-	      );
-	    }.bind(this));
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'item-basket' },
-	      React.createElement(
-	        'h2',
-	        null,
-	        'Shopping Basket'
-	      ),
-	      React.createElement(
-	        'ul',
-	        null,
-	        boughtList
-	      ),
-	      React.createElement(BasketTotal, { total: this.props.total, itemNumber: this.props.items, discountVouchers: this.props.discountVouchers })
-	    );
-	  }
-	
-	});
-	
-	module.exports = BasketList;
-
-/***/ },
-/* 170 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var classNames = __webpack_require__(167);
-	var ShoppingBasket = __webpack_require__(160);
-	
-	var BasketItemDetail = React.createClass({
-	  displayName: 'BasketItemDetail',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return {};
-	  },
-	
-	  render: function render() {
-	
-	    console.log("basket item detail", this.props.item);
-	
-	    var cost = this.props.item.price;
-	    if (this.props.item.salePrice) {
-	      cost = this.props.item.salePrice;
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { id: 'basketItemDetail' },
-	      React.createElement(
-	        'div',
-	        { id: 'basket-item-text' },
-	        React.createElement(
-	          'h4',
-	          { id: this.props.item.id },
-	          this.props.item.name
-	        ),
-	        React.createElement(
-	          'h5',
-	          null,
-	          'Colour: ',
-	          this.props.item.colour
-	        ),
-	        React.createElement(
-	          'h5',
-	          null,
-	          'Price: \xA3',
-	          cost
-	        )
-	      ),
-	      React.createElement(
-	        'button',
-	        { id: 'basket-remove-button', value: this.props.item.id, onClick: this.props.removeItem },
-	        'Remove'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = BasketItemDetail;
-
-/***/ },
-/* 171 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	
-	var BasketTotal = function BasketTotal(props) {
-	
-	  console.log("BasketTotal total", props.total);
-	
-	  if (!props.itemNumber) {
-	    return React.createElement("p", null);
-	  }
-	
-	  return React.createElement(
-	    "div",
-	    null,
-	    React.createElement(
-	      "h4",
-	      null,
-	      "Total items in basket: ",
-	      props.itemNumber
-	    ),
-	    React.createElement(
-	      "h4",
-	      null,
-	      "Total before discounts: \xA3",
-	      props.total.toFixed(2),
-	      " "
-	    )
-	  );
-	};
-	
-	module.exports = BasketTotal;
-
-/***/ },
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var classNames = __webpack_require__(167);
-	
-	var VoucherBox = React.createClass({
-	  displayName: 'VoucherBox',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      errorMessage: ""
-	    };
-	  },
-	
-	  handleVoucherClick: function handleVoucherClick() {
-	    console.log("this handle click in voucher box called");
-	    var input = document.querySelector('#voucher-input');
-	    console.log("input value is", input.value);
-	    var voucher = null;
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-	
-	    try {
-	      for (var _iterator = this.props.discountVouchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var item = _step.value;
-	
-	        if (item.code === input.value) {
-	          voucher = item;
-	          var element = document.querySelector('#error-message1');
-	          element.innerText = " ";
-	        }
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
-	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
-	        }
-	      }
-	    }
-	
-	    if (!voucher) {
-	      var element = document.querySelector('#error-message1');
-	      element.innerText = "Voucher code not recognised";
-	    }
-	    console.log("voucher is", voucher);
-	    // debugger;
-	    this.props.submitVoucher(voucher);
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    console.log("component will receive props called");
-	    this.setState({
-	      errorMessage: nextProps.errorMessage
-	    });
-	  },
-	
-	  render: function render() {
-	
-	    console.log("voucherBox", this.props.discountVouchers);
-	    if (!this.props.discountVouchers) {
-	      return React.createElement('p', null);
-	    }
-	
-	    console.log("voucher box error message is", this.props.errorMessage);
-	    // var errorMessage = this.state.errorMessage;
-	    // if (!this.state.errorMessage){
-	    //   errorMessage = "";
-	    // }
-	
-	    return React.createElement(
-	      'div',
-	      { id: 'voucher-box' },
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Enter voucher code:'
-	      ),
-	      React.createElement('input', { id: 'voucher-input', type: 'text' }),
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleVoucherClick },
-	        'Submit'
-	      ),
-	      React.createElement('h5', { id: 'error-message1' }),
-	      React.createElement(
-	        'h5',
-	        null,
-	        this.state.errorMessage
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = VoucherBox;
 
 /***/ }
 /******/ ]);
