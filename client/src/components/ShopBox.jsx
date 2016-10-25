@@ -94,7 +94,7 @@ var ShopBox = React.createClass({
     }
     this.state.shoppingBasket.checkDiscountEligible(voucher);
     this.setState({shoppingTotal: this.state.shoppingBasket.total});
-    this.setState({error: ""});
+    this.setState({error: "Voucher accepted"});
     console.log("error message in shop box is", this.state.error)
   },
 

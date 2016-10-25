@@ -56,7 +56,7 @@ var VoucherBox = React.createClass({
       <div id="voucher-box">
           <h4>Enter voucher code:</h4>
             <input id="voucher-input" type="text"></input>
-            <button onClick={this.handleVoucherClick}>Submit</button>
+            <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>
             <h5 id="error-message1"></h5>
             <h5>{this.state.errorMessage}</h5>
       </div>

@@ -57,3 +57,13 @@ button{
   display: inline-block;
   margin-top: 0;
 }
+
+input{
+  display: inline-block;
+}
+
+#voucher-submit-button{
+  margin-right: 60%;
+  display: inline;
+  float:right;
+}

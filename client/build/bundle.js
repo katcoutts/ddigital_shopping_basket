@@ -19873,7 +19873,7 @@
 	    }
 	    this.state.shoppingBasket.checkDiscountEligible(voucher);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
-	    this.setState({ error: "" });
+	    this.setState({ error: "Voucher accepted" });
 	    console.log("error message in shop box is", this.state.error);
 	  },
 	
@@ -20495,32 +20495,38 @@
 	
 	var React = __webpack_require__(1);
 	
-	var BasketTotal = function BasketTotal(props) {
+	var BasketTotal = React.createClass({
+	  displayName: "BasketTotal",
 	
-	  console.log("BasketTotal total", props.total);
 	
-	  if (!props.itemNumber) {
-	    return React.createElement("p", null);
+	  render: function render() {
+	
+	    console.log("BasketTotal total", this.props.total);
+	
+	    if (!this.props.itemNumber) {
+	      return React.createElement("p", null);
+	    }
+	
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Total items in basket: ",
+	        this.props.itemNumber
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Total: \xA3",
+	        this.props.total.toFixed(2),
+	        " "
+	      )
+	    );
 	  }
 	
-	  return React.createElement(
-	    "div",
-	    null,
-	    React.createElement(
-	      "h4",
-	      null,
-	      "Total items in basket: ",
-	      props.itemNumber
-	    ),
-	    React.createElement(
-	      "h4",
-	      null,
-	      "Total before discounts: \xA3",
-	      props.total.toFixed(2),
-	      " "
-	    )
-	  );
-	};
+	});
 	
 	module.exports = BasketTotal;
 
@@ -20618,7 +20624,7 @@
 	      React.createElement('input', { id: 'voucher-input', type: 'text' }),
 	      React.createElement(
 	        'button',
-	        { onClick: this.handleVoucherClick },
+	        { id: 'voucher-submit-button', onClick: this.handleVoucherClick },
 	        'Submit'
 	      ),
 	      React.createElement('h5', { id: 'error-message1' }),
