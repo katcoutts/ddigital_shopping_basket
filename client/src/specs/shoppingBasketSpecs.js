@@ -53,5 +53,14 @@ describe( "ShoppingBasket", function() {
     assert.equal(0, shoppingBasket.items.length);
   })
 
+  it("should start with a total value of 0", function(){
+    assert.equal(0, shoppingBasket.total);
+  })
+
+  it("can add an item to the basket", function(){
+    shoppingBasket.add(flipFlops);
+    assert.equal(1, shoppingBasket.items.length);
+  })
+
 
 })
