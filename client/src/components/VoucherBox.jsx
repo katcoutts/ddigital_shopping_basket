@@ -16,13 +16,16 @@ var VoucherBox = React.createClass({
     for (var item of this.props.discountVouchers){
       if(item.code === input.value){
         voucher = item;
+        var element = document.querySelector('#error-message1');
+        element.innerText = "Voucher accepted"
       }
     }
     if (!voucher){
-      return false
+      var element = document.querySelector('#error-message1');
+      element.innerText = "Voucher code not recognised"
     }
     console.log("voucher is", voucher)
-    debugger;
+    // debugger;
     this.props.submitVoucher(voucher)
   },
 
@@ -36,10 +39,9 @@ var VoucherBox = React.createClass({
     return (
       <div id="voucher-box">
           <h4>Enter voucher code:</h4>
-          <form>
             <input id="voucher-input" type="text"></input>
             <button onClick={this.handleVoucherClick}>Submit</button>
-          </form>
+            <h5 id="error-message1"></h5>
       </div>
   )
 }

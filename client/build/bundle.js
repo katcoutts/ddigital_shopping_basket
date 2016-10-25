@@ -37492,6 +37492,8 @@
 	
 	        if (item.code === input.value) {
 	          voucher = item;
+	          var element = document.querySelector('#error-message1');
+	          element.innerText = "Voucher accepted";
 	        }
 	      }
 	    } catch (err) {
@@ -37510,10 +37512,11 @@
 	    }
 	
 	    if (!voucher) {
-	      return false;
+	      var element = document.querySelector('#error-message1');
+	      element.innerText = "Voucher code not recognised";
 	    }
 	    console.log("voucher is", voucher);
-	    debugger;
+	    // debugger;
 	    this.props.submitVoucher(voucher);
 	  },
 	
@@ -37532,16 +37535,13 @@
 	        null,
 	        'Enter voucher code:'
 	      ),
+	      React.createElement('input', { id: 'voucher-input', type: 'text' }),
 	      React.createElement(
-	        'form',
-	        null,
-	        React.createElement('input', { id: 'voucher-input', type: 'text' }),
-	        React.createElement(
-	          'button',
-	          { onClick: this.handleVoucherClick },
-	          'Submit'
-	        )
-	      )
+	        'button',
+	        { onClick: this.handleVoucherClick },
+	        'Submit'
+	      ),
+	      React.createElement('h5', { id: 'error-message1' })
 	    );
 	  }
 	
