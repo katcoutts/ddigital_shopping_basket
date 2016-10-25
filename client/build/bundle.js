@@ -19758,7 +19758,8 @@
 	var ShoppingBasket = __webpack_require__(160);
 	var ShoppingItem = __webpack_require__(161);
 	var DiscountVoucher = __webpack_require__(162);
-	var ShoppingItemList = __webpack_require__(165);
+	var ShoppingItemList = __webpack_require__(168);
+	var BasketBriefDetails = __webpack_require__(169);
 	var _ = __webpack_require__(163);
 	
 	var ShopBox = React.createClass({
@@ -19768,14 +19769,19 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      shoppingItems: [],
-	      shoppingBasket: [],
+	      shoppingBasket: new ShoppingBasket(),
 	      shoppingTotal: 0,
 	      itemNumber: 0,
-	      discountVoucher: []
+	      discountVouchers: []
 	    };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    this.sendItemsHTTPRequest();
+	    this.sendVoucherDetailHTTPRequest();
+	  },
+	
+	  sendItemsHTTPRequest: function sendItemsHTTPRequest() {
 	    var url = "api/shoppingItems";
 	    var request = new XMLHttpRequest();
 	    request.open('GET', url);
@@ -19787,9 +19793,23 @@
 	    request.send();
 	  },
 	
-	  componentDidUpdate: function componentDidUpdate() {},
+	  sendVoucherDetailHTTPRequest: function sendVoucherDetailHTTPRequest() {
+	    var url = "api/discounts";
+	    var request = new XMLHttpRequest();
+	    request.open('GET', url);
+	    request.onload = function () {
+	      console.log(request.responseText);
+	      var discounts = JSON.parse(request.responseText);
+	      this.setState({ discountVouchers: discounts });
+	    }.bind(this);
+	    request.send();
+	  },
 	
-	  handleClick: function handleClick() {},
+	  componentDidUpdate: function componentDidUpdate() {
+	    console.log(this.state.shoppingBasket);
+	  },
+	
+	  addItemToBasket: function addItemToBasket(item) {},
 	
 	  render: function render() {
 	
@@ -19798,10 +19818,16 @@
 	      null,
 	      React.createElement(
 	        'h1',
-	        null,
+	        { id: 'heading' },
 	        'DD\'s Clothing'
 	      ),
-	      React.createElement(ShoppingItemList, { items: this.state.shoppingItems })
+	      React.createElement(
+	        'button',
+	        { id: 'basket-button', onClick: this.showShoppingBasket },
+	        'View Basket in Detail'
+	      ),
+	      React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
+	      React.createElement(ShoppingItemList, { buyItem: this.addItemToBasket, items: this.state.shoppingItems })
 	    );
 	  }
 	
@@ -37028,39 +37054,7 @@
 
 
 /***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ItemDetail = __webpack_require__(166);
-	
-	var ShoppingItemList = function ShoppingItemList(props) {
-	
-	  var clothingNodes = props.items.map(function (clothing, index) {
-	    console.log("clothing ", clothing);
-	    return React.createElement(
-	      'li',
-	      { key: index },
-	      React.createElement(ItemDetail, { item: clothing })
-	    );
-	  });
-	
-	  return React.createElement(
-	    'div',
-	    { className: 'clothing-list' },
-	    React.createElement(
-	      'ul',
-	      null,
-	      clothingNodes
-	    )
-	  );
-	};
-	
-	module.exports = ShoppingItemList;
-
-/***/ },
+/* 165 */,
 /* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -37086,31 +37080,36 @@
 	    if (this.props.item.salePrice) {
 	      saleInfo = this.props.item.salePrice;
 	      var classes = classNames("onSale");
+	      var classes2 = classNames("salePrice");
 	    }
 	
 	    return React.createElement(
 	      'div',
 	      { id: 'clothingItem' },
 	      React.createElement(
-	        'h4',
-	        { id: this.props.item.id },
-	        this.props.item.name
-	      ),
-	      React.createElement(
-	        'h5',
-	        { className: classes },
-	        'Price: \xA3',
-	        this.props.item.price.toFixed(2)
-	      ),
-	      React.createElement(
-	        'h5',
-	        null,
-	        'Sale Price: \xA3',
-	        saleInfo
+	        'div',
+	        { id: 'itemDetails' },
+	        React.createElement(
+	          'h4',
+	          { id: this.props.item.id },
+	          this.props.item.name
+	        ),
+	        React.createElement(
+	          'h5',
+	          { className: classes },
+	          'Price: \xA3',
+	          this.props.item.price.toFixed(2)
+	        ),
+	        React.createElement(
+	          'h5',
+	          { className: classes2 },
+	          'Sale Price: \xA3',
+	          saleInfo
+	        )
 	      ),
 	      React.createElement(
 	        'button',
-	        { value: this.props.item },
+	        { className: 'item-button', value: this.props.item, onClick: this.buyThisItem },
 	        'Add to basket'
 	      )
 	    );
@@ -37173,6 +37172,82 @@
 		}
 	}());
 
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ItemDetail = __webpack_require__(166);
+	
+	var ShoppingItemList = React.createClass({
+	  displayName: 'ShoppingItemList',
+	
+	
+	  render: function render() {
+	
+	    var clothing = this.props.items;
+	
+	    var clothingList = clothing.map(function (clothing, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        React.createElement(ItemDetail, { key: index, item: clothing, buyThisItem: this.props.buyItem })
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'clothing-list' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        clothingList
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ShoppingItemList;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var BasketBriefDetails = function BasketBriefDetails(props) {
+	
+	  return React.createElement(
+	    "div",
+	    { id: "basket-details" },
+	    React.createElement(
+	      "p",
+	      null,
+	      "Basket"
+	    ),
+	    React.createElement(
+	      "p",
+	      null,
+	      "Items in basket: ",
+	      props.items
+	    ),
+	    React.createElement(
+	      "p",
+	      null,
+	      "Basket total: \xA3",
+	      props.total.toFixed(2),
+	      " "
+	    )
+	  );
+	};
+	
+	module.exports = BasketBriefDetails;
 
 /***/ }
 /******/ ]);
