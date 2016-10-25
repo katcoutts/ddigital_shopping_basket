@@ -4,6 +4,8 @@ var ShoppingItem = require('../models/shoppingItem');
 var DiscountVoucher = require('../models/discountVoucher');
 var ShoppingItemList = require('./ShoppingItemList');
 var BasketBriefDetails = require('./BasketBriefDetails');
+var BasketList = require('./BasketList');
+var VoucherBox = require('./VoucherBox')
 var _ = require('lodash');
 
 var ShopBox = React.createClass({
@@ -19,8 +21,10 @@ var ShopBox = React.createClass({
   },
 
   componentDidMount: function() {
+    if (!this.state.shoppingTotal){
     this.sendItemsHTTPRequest();
     this.sendVoucherDetailHTTPRequest();
+    }
   },
 
   sendItemsHTTPRequest: function(){
@@ -47,9 +51,16 @@ var ShopBox = React.createClass({
     request.send();
   },
 
-
-  componentDidUpdate: function(){
-    console.log(this.state.shoppingBasket)
+  deleteItem: function(event){
+    console.log("removeitem called");
+    console.log("remove event", event.target.value);
+    console.log("shopping basket", this.state.shoppingBasket);
+    console.log("id to number", parseInt(event.target.value))
+    var id = parseInt(event.target.value)
+    this.state.shoppingBasket.removeItem(id);
+    this.setState({shoppingTotal: this.state.shoppingBasket.total});
+    this.setState({itemNumber: this.state.shoppingBasket.items.length});
+    console.log("shoppingbasket", this.state.shoppingBasket)
   },
 
   buyItem: function(event){
@@ -69,6 +80,11 @@ var ShopBox = React.createClass({
     this.setState({itemNumber: this.state.shoppingBasket.items.length})
   },
 
+  handleVoucher: function(voucher){
+    this.state.shoppingBasket.checkDiscountEligible(voucher);
+    this.setState({shoppingTotal: this.state.shoppingBasket.total})
+  },
+
 
   render: function() {
     
@@ -77,7 +93,9 @@ var ShopBox = React.createClass({
         <h1 id="heading">DD's Clothing</h1>
         <button id="basket-button" onClick={this.showShoppingBasket}>View Basket in Detail</button>
         <BasketBriefDetails items={this.state.itemNumber} total={this.state.shoppingTotal}/>
-        <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>   
+        <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
+        <BasketList shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem}/>   
+        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher}/> 
       </div>
       )
   }

@@ -19758,8 +19758,10 @@
 	var ShoppingBasket = __webpack_require__(160);
 	var ShoppingItem = __webpack_require__(161);
 	var DiscountVoucher = __webpack_require__(162);
-	var ShoppingItemList = __webpack_require__(168);
-	var BasketBriefDetails = __webpack_require__(169);
+	var ShoppingItemList = __webpack_require__(165);
+	var BasketBriefDetails = __webpack_require__(168);
+	var BasketList = __webpack_require__(169);
+	var VoucherBox = __webpack_require__(172);
 	var _ = __webpack_require__(163);
 	
 	var ShopBox = React.createClass({
@@ -19777,8 +19779,10 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    this.sendItemsHTTPRequest();
-	    this.sendVoucherDetailHTTPRequest();
+	    if (!this.state.shoppingTotal) {
+	      this.sendItemsHTTPRequest();
+	      this.sendVoucherDetailHTTPRequest();
+	    }
 	  },
 	
 	  sendItemsHTTPRequest: function sendItemsHTTPRequest() {
@@ -19805,8 +19809,16 @@
 	    request.send();
 	  },
 	
-	  componentDidUpdate: function componentDidUpdate() {
-	    console.log(this.state.shoppingBasket);
+	  deleteItem: function deleteItem(event) {
+	    console.log("removeitem called");
+	    console.log("remove event", event.target.value);
+	    console.log("shopping basket", this.state.shoppingBasket);
+	    console.log("id to number", parseInt(event.target.value));
+	    var id = parseInt(event.target.value);
+	    this.state.shoppingBasket.removeItem(id);
+	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
+	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
+	    console.log("shoppingbasket", this.state.shoppingBasket);
 	  },
 	
 	  buyItem: function buyItem(event) {
@@ -19848,6 +19860,11 @@
 	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
 	  },
 	
+	  handleVoucher: function handleVoucher(voucher) {
+	    this.state.shoppingBasket.checkDiscountEligible(voucher);
+	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
+	  },
+	
 	  render: function render() {
 	
 	    return React.createElement(
@@ -19864,7 +19881,9 @@
 	        'View Basket in Detail'
 	      ),
 	      React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
-	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems })
+	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
+	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem }),
+	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher })
 	    );
 	  }
 	
@@ -19901,18 +19920,22 @@
 	  },
 	
 	  removeItem: function removeItem(id) {
-	    var items = this.items;
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
 	    var _iteratorError = undefined;
 	
 	    try {
-	      for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        item = _step.value;
+	      for (var _iterator = this.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var item = _step.value;
 	
 	        if (item.id === id) {
-	          var index = items.indexOf(item);
-	          items.splice(index, 1);
+	          var index = this.items.indexOf(item);
+	          this.items.splice(index, 1);
+	          var price = item.salePrice;
+	          if (!item.salePrice) {
+	            price = item.price;
+	          }
+	          this.total -= price;
 	        }
 	      }
 	    } catch (err) {
@@ -37079,7 +37102,46 @@
 
 
 /***/ },
-/* 165 */,
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ItemDetail = __webpack_require__(166);
+	var ShoppingBasket = __webpack_require__(160);
+	
+	var ShoppingItemList = React.createClass({
+	  displayName: 'ShoppingItemList',
+	
+	
+	  render: function render() {
+	    var clothing = this.props.items;
+	
+	    var clothingList = clothing.map(function (clothing, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        React.createElement(ItemDetail, { item: clothing, buyItem: this.props.buyItem })
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'clothing-list' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        clothingList
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ShoppingItemList;
+
+/***/ },
 /* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -37106,6 +37168,11 @@
 	      var classes2 = classNames("salePrice");
 	    }
 	
+	    var inStock = "Yes";
+	    if (!this.props.item.stockQuantity) {
+	      inStock = "No";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { id: 'clothingItem' },
@@ -37119,6 +37186,12 @@
 	        ),
 	        React.createElement(
 	          'h5',
+	          null,
+	          'Colour: ',
+	          this.props.item.colour
+	        ),
+	        React.createElement(
+	          'h5',
 	          { className: classes },
 	          'Price: \xA3',
 	          this.props.item.price.toFixed(2)
@@ -37128,6 +37201,12 @@
 	          { className: classes2 },
 	          'Sale Price: \xA3',
 	          saleInfo
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'In Stock: ',
+	          inStock
 	        )
 	      ),
 	      React.createElement(
@@ -37200,46 +37279,6 @@
 /* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ItemDetail = __webpack_require__(166);
-	var ShoppingBasket = __webpack_require__(160);
-	
-	var ShoppingItemList = React.createClass({
-	  displayName: 'ShoppingItemList',
-	
-	
-	  render: function render() {
-	    var clothing = this.props.items;
-	
-	    var clothingList = clothing.map(function (clothing, index) {
-	      return React.createElement(
-	        'li',
-	        { key: index },
-	        React.createElement(ItemDetail, { item: clothing, buyItem: this.props.buyItem })
-	      );
-	    }.bind(this));
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'clothing-list' },
-	      React.createElement(
-	        'ul',
-	        null,
-	        clothingList
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = ShoppingItemList;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
 	var React = __webpack_require__(1);
@@ -37271,6 +37310,244 @@
 	};
 	
 	module.exports = BasketBriefDetails;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ShoppingBasket = __webpack_require__(160);
+	var BasketItemDetail = __webpack_require__(170);
+	var BasketTotal = __webpack_require__(171);
+	
+	var BasketList = React.createClass({
+	  displayName: 'BasketList',
+	
+	
+	  render: function render() {
+	
+	    var boughtItems = this.props.shoppingBasket.items;
+	    console.log("BasketDetails", this.props.shoppingBasket);
+	
+	    var boughtList = boughtItems.map(function (boughtItem, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        React.createElement(BasketItemDetail, { item: boughtItem, removeItem: this.props.removeItem })
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'item-basket' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Shopping Basket'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        boughtList
+	      ),
+	      React.createElement(BasketTotal, { total: this.props.total, itemNumber: this.props.items, discountVouchers: this.props.discountVouchers })
+	    );
+	  }
+	
+	});
+	
+	module.exports = BasketList;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(167);
+	var ShoppingBasket = __webpack_require__(160);
+	
+	var BasketItemDetail = React.createClass({
+	  displayName: 'BasketItemDetail',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return {};
+	  },
+	
+	  render: function render() {
+	
+	    console.log("basket item detail", this.props.item);
+	
+	    var cost = this.props.item.price;
+	    if (this.props.item.salePrice) {
+	      cost = this.props.item.salePrice;
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { id: 'basketItemDetail' },
+	      React.createElement(
+	        'div',
+	        { id: 'basket-item-text' },
+	        React.createElement(
+	          'h4',
+	          { id: this.props.item.id },
+	          this.props.item.name
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Colour: ',
+	          this.props.item.colour
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Price: \xA3',
+	          cost
+	        )
+	      ),
+	      React.createElement(
+	        'button',
+	        { id: 'basket-remove-button', value: this.props.item.id, onClick: this.props.removeItem },
+	        'Remove'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = BasketItemDetail;
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var BasketTotal = function BasketTotal(props) {
+	
+	  console.log("BasketTotal total", props.total);
+	
+	  if (!props.itemNumber) {
+	    return React.createElement("p", null);
+	  }
+	
+	  return React.createElement(
+	    "div",
+	    null,
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Total items in basket: ",
+	      props.itemNumber
+	    ),
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Total before discounts: \xA3",
+	      props.total.toFixed(2),
+	      " "
+	    )
+	  );
+	};
+	
+	module.exports = BasketTotal;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classNames = __webpack_require__(167);
+	
+	var VoucherBox = React.createClass({
+	  displayName: 'VoucherBox',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return {};
+	  },
+	
+	  handleVoucherClick: function handleVoucherClick() {
+	    console.log("this handle click in voucher box called");
+	    var input = document.querySelector('#voucher-input');
+	    console.log("input value is", input.value);
+	    var voucher = null;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = this.props.discountVouchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var item = _step.value;
+	
+	        if (item.code === input.value) {
+	          voucher = item;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    if (!voucher) {
+	      return false;
+	    }
+	    console.log("voucher is", voucher);
+	    debugger;
+	    this.props.submitVoucher(voucher);
+	  },
+	
+	  render: function render() {
+	
+	    console.log("voucherBox", this.props.discountVouchers);
+	    if (!this.props.discountVouchers) {
+	      return React.createElement('p', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { id: 'voucher-box' },
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Enter voucher code:'
+	      ),
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement('input', { id: 'voucher-input', type: 'text' }),
+	        React.createElement(
+	          'button',
+	          { onClick: this.handleVoucherClick },
+	          'Submit'
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = VoucherBox;
 
 /***/ }
 /******/ ]);

@@ -26,13 +26,17 @@ ShoppingBasket.prototype = {
 
 
   removeItem: function( id ) {
-    var items = this.items;
-    for ( item of items ) {
+    for ( var item of this.items ) {
       if ( item.id === id ) {
-        var index = items.indexOf( item );
-        items.splice( index, 1 );
+        var index = this.items.indexOf( item );
+        this.items.splice( index, 1 );
+        var price = item.salePrice;
+        if (!item.salePrice){
+          price = item.price
+        }
+        this.total -= price
       }
-    }
+    }  
   },
 
   empty: function(){
