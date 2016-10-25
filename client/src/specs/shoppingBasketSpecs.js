@@ -99,6 +99,11 @@ describe( "ShoppingBasket", function() {
     assert.equal("Flip Flops", shoppingBasket.items[0].name)
   })
 
+  it("can't add an item if stock quantity is zero", function(){
+    shoppingBasket.add(flipFlopsBlue);
+    assert.equal(0, shoppingBasket.items.length)
+  })
+
 
 
 
