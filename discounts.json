@@ -1,22 +1,22 @@
 [
   {
-    "id": "fiveOff",
-    "discountAmount": 5,
+    "code": "5-OFF",
+    "discountAmount": 5.00,
     "priceLimit": 0,
-    "itemRequirement": null 
+    "itemRequirement": []
   },
 
   {
-    "id": "tenOff",
-    "discountAmount": 10,
-    "priceLimit": 50,
-    "itemRequirement": null
+    "code": "10-OFF",
+    "discountAmount": 10.00,
+    "priceLimit": 50.00,
+    "itemRequirement": []
   },
 
   {
-    "id": "fifteenOff",
-    "discountAmount": 15,
-    "priceLimit": 75,
-    "itemRequirement": "footwear"
+    "code": "15-OFF",
+    "discountAmount": 15.00,
+    "priceLimit": 75.00,
+    "itemRequirement": ["footwear"]
   }
 ]

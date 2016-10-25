@@ -12,6 +12,8 @@
   "dependencies": {
     "express": "^4.13.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^3.1.2"
+  },
   "description": ""
 }
