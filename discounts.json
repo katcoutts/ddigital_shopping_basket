@@ -1,0 +1,22 @@
+[
+  {
+    "id": "fiveOff",
+    "discountAmount": 5,
+    "priceLimit": 0,
+    "itemRequirement": null 
+  },
+
+  {
+    "id": "tenOff",
+    "discountAmount": 10,
+    "priceLimit": 50,
+    "itemRequirement": null
+  },
+
+  {
+    "id": "fifteenOff",
+    "discountAmount": 15,
+    "priceLimit": 75,
+    "itemRequirement": "footwear"
+  }
+]
