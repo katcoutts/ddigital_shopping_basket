@@ -53,29 +53,35 @@ ShoppingBasket.prototype = {
     return total;
   },
 
-  // checkDiscountEligible: function(discount){
-  //   if (!discount.itemRequirement){
-  //     this.checkDiscountValid(discount)
-  //   }
-  //   else {
-  //     for (var requirement of discount.itemRequirement)  
-  //       for (var item of this.items) {
-  //       if (requirement === item.type){
-  //         this.checkDiscountValid(discount)
-  //       }
-  //       else {
-  //         return
-  //       }
-  //     }
-  //   }
-  // },
-
-  checkDiscountValid: function(discount){
-    if (this.total > discount.priceLimit) {
-      this.applyDiscount(discount)
+  checkDiscountEligible: function(discount){
+    if (discount.itemRequirement.length === 0){
+      this.checkSpendMet(discount)
     }
     else {
-      return
+      this.checkItemRequirementMet(discount);
+    }
+  },
+
+  checkItemRequirementMet: function(discount){
+    for (var requirement of discount.itemRequirement){  
+      for (var item of this.items) {
+        if (requirement === item.type){
+        this.checkSpendMet(discount)
+        }
+        else {
+          return null
+        }
+      }
+    }
+  },
+
+  checkSpendMet: function(discount){
+    if (this.total > discount.priceLimit) {
+      this.applyDiscount(discount)
+      return true
+    }
+    else {
+      return null
     }
   },
 

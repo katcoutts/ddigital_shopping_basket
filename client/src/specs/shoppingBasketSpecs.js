@@ -57,7 +57,18 @@ describe( "ShoppingBasket", function() {
       "price": 19.00,
       "salePrice": null,
       "stockQuantity": 0
-    })  
+    });
+    courtShoes = new ShoppingItem ({
+    "id": 1,
+    "name": "Almond Toe Court Shoes",
+    "colour": "Patent Black",
+    "category": "Women's Footwear",
+    "type": "footwear",
+    "gender": "women",
+    "price": 99.00,
+    "salePrice": null,
+    "stockQuantity": 5
+    })   
   })
 
   it("should start empty", function(){
@@ -107,15 +118,32 @@ describe( "ShoppingBasket", function() {
   it("can apply basic discount with no item requirements", function(){
     shoppingBasket.add(flipFlopsBlue);
     assert.equal(19.00, shoppingBasket.total);
-    shoppingBasket.checkDiscountValid(fiveDiscount);
+    shoppingBasket.checkDiscountEligible(fiveDiscount);
     assert.equal(14.00, shoppingBasket.total);
   })
 
   it("will not apply discount if basket total requirement not met", function(){
     shoppingBasket.add(flipFlopsBlue);
     assert.equal(19.00, shoppingBasket.total);
-    shoppingBasket.checkDiscountValid(fifteenDiscount);
+    shoppingBasket.checkSpendMet(fifteenDiscount);
     assert.equal(19.00, shoppingBasket.total);
+  })
+
+  it("will apply discount if item requirements met", function(){
+    shoppingBasket.add(flipFlopsBlue);
+    shoppingBasket.add(flipFlops);
+    shoppingBasket.add(shirt);
+    assert.equal(77.99, shoppingBasket.total.toFixed(2));
+    shoppingBasket.checkDiscountEligible(fifteenDiscount);
+    assert.equal(62.99, shoppingBasket.total.toFixed(2));
+  })
+
+  it("won't apply discount if spend met but item requirements not met", function(){
+    shoppingBasket.add(shirt);
+    shoppingBasket.add(courtShoes);
+    assert.equal(138.99, shoppingBasket.total.toFixed(2));
+    shoppingBasket.checkDiscountEligible(fifteenDiscount);
+    assert.equal(138.99, shoppingBasket.total.toFixed(2));
   })
 
 
