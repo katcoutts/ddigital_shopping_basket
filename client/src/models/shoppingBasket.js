@@ -14,37 +14,40 @@ ShoppingBasket.prototype = {
 
 // also need to add a warning to the add if you can't have it because there are no things in stock
   add: function(item){
-    // if (item.stockQuantity > 0){
+    if (item.stockQuantity > 0){
     this.items.push(item);
-    // }
-    // this.total();
+    }
+    // this.calculateCost();
   },
 
 
-  // remove: function(item){
-  //   for (i of this.items){
-  //     // i would actually update this to be a bit more like the remove in the bogof which uses the indexOf maybe?
-  //     if (this.items[i].id === item.id){
-  //       this.items.splice(i, 1);
-  //       return;
-  //     }
-  //   }
-  // },
+  removeItem: function( id ) {
+    var items = this.items;
+    for ( item of items ) {
+      if ( item.id === id ) {
+        var index = items.indexOf( item );
+        items.splice( index, 1 );
+      }
+    }
+  },
 
-  // empty: function(){
-  //   this.items = [];
-  // },
+  empty: function(){
+    this.items = [];
+  },
 
-  // total: function(){
-  //   var total = 0;
-  //   for (var shoppingItem of this.items){
-  //     total += shoppingItem.price;
-  //   }
-  //   if (total > 20){
-  //     total = total - (total/10);
-  // }
-  // return total
-  // },
+  calculateCost: function(){
+    var total = 0;
+    for (var shoppingItem of this.items){
+      if (!shoppingItem.salePrice){
+        total += shoppingItem.price;
+      }
+      else {
+        total += shoppingItem.salePrice;
+      }
+    }
+    this.total = total;
+    return total;
+  }
 
   // // over20Discount: function(){
   // //   var total = this.applyBogof();
