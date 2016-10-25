@@ -116,26 +116,26 @@ describe( "ShoppingBasket", function() {
   })
 
   it("can apply basic discount with no item requirements", function(){
-    shoppingBasket.add(flipFlopsBlue);
+    shoppingBasket.add(flipFlops);
     assert.equal(19.00, shoppingBasket.total);
     shoppingBasket.checkDiscountEligible(fiveDiscount);
     assert.equal(14.00, shoppingBasket.total);
   })
 
   it("will not apply discount if basket total requirement not met", function(){
-    shoppingBasket.add(flipFlopsBlue);
+    shoppingBasket.add(flipFlops);
     assert.equal(19.00, shoppingBasket.total);
     shoppingBasket.checkSpendMet(fifteenDiscount);
     assert.equal(19.00, shoppingBasket.total);
   })
 
   it("will apply discount if item requirements met", function(){
-    shoppingBasket.add(flipFlopsBlue);
+    shoppingBasket.add(courtShoes);
     shoppingBasket.add(flipFlops);
     shoppingBasket.add(shirt);
-    assert.equal(77.99, shoppingBasket.total.toFixed(2));
+    assert.equal(157.99, shoppingBasket.total.toFixed(2));
     shoppingBasket.checkDiscountEligible(fifteenDiscount);
-    assert.equal(62.99, shoppingBasket.total.toFixed(2));
+    assert.equal(142.99, shoppingBasket.total.toFixed(2));
   })
 
   it("won't apply discount if spend met but item requirements not met", function(){
@@ -152,8 +152,5 @@ describe( "ShoppingBasket", function() {
     shoppingBasket.checkDiscountEligible(fifteenDiscount);
     assert.equal(19.00, shoppingBasket.total.toFixed(2));
   })
-
-
-
 
 })
