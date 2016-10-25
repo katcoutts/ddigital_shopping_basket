@@ -19774,7 +19774,8 @@
 	      shoppingBasket: new ShoppingBasket(),
 	      shoppingTotal: 0,
 	      itemNumber: 0,
-	      discountVouchers: []
+	      discountVouchers: [],
+	      error: null
 	    };
 	  },
 	
@@ -19861,8 +19862,17 @@
 	  },
 	
 	  handleVoucher: function handleVoucher(voucher) {
+	    if (this.state.shoppingBasket.checkItemRequirementMet(voucher) === false) {
+	      this.setState({ error: "You have not bought the appropriate items to use this voucher" });
+	      return;
+	    }
+	    if (this.state.shoppingBasket.checkSpendMet(voucher) === false) {
+	      this.setState({ error: "You have not spent enough to redeem this voucher" });
+	      return;
+	    }
 	    this.state.shoppingBasket.checkDiscountEligible(voucher);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
+	    console.log("error message in shop box is", this.state.error);
 	  },
 	
 	  render: function render() {
@@ -19875,15 +19885,10 @@
 	        { id: 'heading' },
 	        'DD\'s Clothing'
 	      ),
-	      React.createElement(
-	        'button',
-	        { id: 'basket-button', onClick: this.showShoppingBasket },
-	        'View Basket in Detail'
-	      ),
 	      React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
 	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem }),
-	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher })
+	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error })
 	    );
 	  }
 	
@@ -19999,12 +20004,14 @@
 	  checkDiscountEligible: function checkDiscountEligible(discount) {
 	    if (discount.itemRequirement.length === 0) {
 	      this.checkSpendMet(discount);
+	      return;
 	    } else {
 	      this.checkItemRequirementMet(discount);
 	    }
 	  },
 	
 	  checkItemRequirementMet: function checkItemRequirementMet(discount) {
+	    var items = this.items;
 	    var _iteratorNormalCompletion3 = true;
 	    var _didIteratorError3 = false;
 	    var _iteratorError3 = undefined;
@@ -20017,14 +20024,14 @@
 	        var _iteratorError4 = undefined;
 	
 	        try {
-	          for (var _iterator4 = this.items[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	          for (var _iterator4 = items[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 	            var item = _step4.value;
 	
 	            if (requirement === item.type) {
 	              this.checkSpendMet(discount);
 	              return;
 	            } else {
-	              return null;
+	              return false;
 	            }
 	          }
 	        } catch (err) {
@@ -20061,9 +20068,8 @@
 	  checkSpendMet: function checkSpendMet(discount) {
 	    if (this.total > discount.priceLimit) {
 	      this.applyDiscount(discount);
-	      return true;
 	    } else {
-	      return null;
+	      return false;
 	    }
 	  },
 	
@@ -37477,7 +37483,9 @@
 	
 	
 	  getInitialState: function getInitialState() {
-	    return {};
+	    return {
+	      errorMessage: ""
+	    };
 	  },
 	
 	  handleVoucherClick: function handleVoucherClick() {
@@ -37496,7 +37504,7 @@
 	        if (item.code === input.value) {
 	          voucher = item;
 	          var element = document.querySelector('#error-message1');
-	          element.innerText = "Voucher accepted";
+	          element.innerText = " ";
 	        }
 	      }
 	    } catch (err) {
@@ -37523,12 +37531,25 @@
 	    this.props.submitVoucher(voucher);
 	  },
 	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    console.log("component will receive props called");
+	    this.setState({
+	      errorMessage: nextProps.errorMessage
+	    });
+	  },
+	
 	  render: function render() {
 	
 	    console.log("voucherBox", this.props.discountVouchers);
 	    if (!this.props.discountVouchers) {
 	      return React.createElement('p', null);
 	    }
+	
+	    console.log("voucher box error message is", this.props.errorMessage);
+	    // var errorMessage = this.state.errorMessage;
+	    // if (!this.state.errorMessage){
+	    //   errorMessage = "";
+	    // }
 	
 	    return React.createElement(
 	      'div',
@@ -37544,7 +37565,12 @@
 	        { onClick: this.handleVoucherClick },
 	        'Submit'
 	      ),
-	      React.createElement('h5', { id: 'error-message1' })
+	      React.createElement('h5', { id: 'error-message1' }),
+	      React.createElement(
+	        'h5',
+	        null,
+	        this.state.errorMessage
+	      )
 	    );
 	  }
 	

@@ -118,7 +118,7 @@ describe( "ShoppingBasket", function() {
   it("can apply basic discount with no item requirements", function(){
     shoppingBasket.add(flipFlops);
     assert.equal(19.00, shoppingBasket.total);
-    shoppingBasket.checkDiscountEligible(fiveDiscount);
+    shoppingBasket.checkSpendMet(fiveDiscount);
     assert.equal(14.00, shoppingBasket.total);
   })
 

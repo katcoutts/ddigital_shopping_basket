@@ -63,21 +63,24 @@ ShoppingBasket.prototype = {
   checkDiscountEligible: function(discount){
     if (discount.itemRequirement.length === 0){
       this.checkSpendMet(discount)
+      return
     }
     else {
       this.checkItemRequirementMet(discount);
     }
   },
 
+
   checkItemRequirementMet: function(discount){
+    var items = this.items
     for (var requirement of discount.itemRequirement){  
-      for (var item of this.items) {
+      for (var item of items) {
         if (requirement === item.type){
         this.checkSpendMet(discount)
-        return
+        return 
         }
         else {
-          return null
+          return false
         }
       }
     }
@@ -86,16 +89,18 @@ ShoppingBasket.prototype = {
   checkSpendMet: function(discount){
     if (this.total > discount.priceLimit) {
       this.applyDiscount(discount)
-      return true
     }
     else {
-      return null
+      return false
     }
-  },
+  }, 
+
+
 
   applyDiscount: function(discount){
     this.total -= discount.discountAmount;
   },
+
 
 
 }

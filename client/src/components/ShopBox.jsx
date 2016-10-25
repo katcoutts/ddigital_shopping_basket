@@ -16,7 +16,8 @@ var ShopBox = React.createClass({
       shoppingBasket: new ShoppingBasket(),
       shoppingTotal: 0,
       itemNumber: 0,
-      discountVouchers: []
+      discountVouchers: [],
+      error: null
     }
   },
 
@@ -81,8 +82,17 @@ var ShopBox = React.createClass({
   },
 
   handleVoucher: function(voucher){
+    if (this.state.shoppingBasket.checkItemRequirementMet(voucher) === false){
+      this.setState({error: "You have not bought the appropriate items to use this voucher"});
+      return
+    }
+    if (this.state.shoppingBasket.checkSpendMet(voucher) === false){
+      this.setState({error: "You have not spent enough to redeem this voucher"});
+      return
+    }
     this.state.shoppingBasket.checkDiscountEligible(voucher);
-    this.setState({shoppingTotal: this.state.shoppingBasket.total})
+    this.setState({shoppingTotal: this.state.shoppingBasket.total});
+    console.log("error message in shop box is", this.state.error)
   },
 
 
@@ -91,11 +101,10 @@ var ShopBox = React.createClass({
     return (
       <div>
         <h1 id="heading">DD's Clothing</h1>
-        <button id="basket-button" onClick={this.showShoppingBasket}>View Basket in Detail</button>
         <BasketBriefDetails items={this.state.itemNumber} total={this.state.shoppingTotal}/>
         <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
         <BasketList shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem}/>   
-        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher}/> 
+        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error}/> 
       </div>
       )
   }
