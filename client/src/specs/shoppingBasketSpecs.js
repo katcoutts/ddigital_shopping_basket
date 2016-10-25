@@ -104,6 +104,13 @@ describe( "ShoppingBasket", function() {
     assert.equal(0, shoppingBasket.items.length)
   })
 
+  it("can apply basic discount with no item requirements", function(){
+    shoppingBasket.add(flipFlopsBlue);
+    assert.equal(19.00, shoppingBasket.total);
+    shoppingBasket.checkDiscountValid(fiveDiscount);
+    assert.equal(14.00, shoppingBasket.total);
+  })
+
 
 
 

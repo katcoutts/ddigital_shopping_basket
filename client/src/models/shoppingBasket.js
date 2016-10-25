@@ -14,10 +14,14 @@ ShoppingBasket.prototype = {
 
 // also need to add a warning to the add if you can't have it because there are no things in stock
   add: function(item){
+    var price = item.salePrice;
     if (item.stockQuantity > 0){
     this.items.push(item);
     }
-    // this.calculateCost();
+    if (!item.salePrice){
+      price = item.price
+    }
+    this.total += price
   },
 
 
@@ -47,42 +51,37 @@ ShoppingBasket.prototype = {
     }
     this.total = total;
     return total;
-  }
-
-  // // over20Discount: function(){
-  // //   var total = this.applyBogof();
-  // //   if (total >= 20){
-  // //     total = total - (total/10)
-  // //   }
-  // //   return total;
-  // // },
-
-  // // loyaltyDiscount: function(discount){
-  // //   var cost = this.over20Discount(); 
-  // //   if (this.loyaltyCard === true){
-  // //     cost = cost - (cost/discount);
-  // //   }
-  // //   return cost;
-  // // },
+  },
 
   // checkDiscountEligible: function(discount){
   //   if (!discount.itemRequirement){
-  //     this.checkDiscountValid()
+  //     this.checkDiscountValid(discount)
   //   }
-  //   else if (){
-  //     // if there's a particular type of thing you need to have bought then check it here
-    
+  //   else {
+  //     for (var requirement of discount.itemRequirement)  
+  //       for (var item of this.items) {
+  //       if (requirement === item.type){
+  //         this.checkDiscountValid(discount)
+  //       }
+  //       else {
+  //         return
+  //       }
+  //     }
   //   }
   // },
 
-  // checkDiscountValid: function(discount){
-  //   if (this.total > discount.priceLimit) && ()
+  checkDiscountValid: function(discount){
+    if (this.total > discount.priceLimit) {
+      this.applyDiscount(discount)
+    }
+    else {
+      return
+    }
+  },
 
-  // },
-
-  // applyDiscount: function(discount){
-  //   this.total -= discount.discountAmount;
-  // },
+  applyDiscount: function(discount){
+    this.total -= discount.discountAmount;
+  },
 
 
   // finalPrice: function(){
