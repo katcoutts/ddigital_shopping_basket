@@ -19809,7 +19809,44 @@
 	    console.log(this.state.shoppingBasket);
 	  },
 	
-	  addItemToBasket: function addItemToBasket(item) {},
+	  buyItem: function buyItem(event) {
+	    console.log("event", event);
+	    console.log("shopping items", this.state.shoppingItems);
+	    var item;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = this.state.shoppingItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var shoppingItem = _step.value;
+	
+	        if (shoppingItem.id.toString() === event.target.value) {
+	          item = shoppingItem;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    console.log('item to buy, ', item);
+	    this.state.shoppingBasket.add(item);
+	    // debugger;
+	    console.log("buy item called in shop", this.state.shoppingBasket);
+	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
+	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
+	  },
 	
 	  render: function render() {
 	
@@ -19827,7 +19864,7 @@
 	        'View Basket in Detail'
 	      ),
 	      React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
-	      React.createElement(ShoppingItemList, { buyItem: this.addItemToBasket, items: this.state.shoppingItems })
+	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems })
 	    );
 	  }
 	
@@ -19862,18 +19899,6 @@
 	    }
 	    this.total += price;
 	  },
-	
-	  // add: function(item){
-	  //   var price = item.salePrice;
-	  //   if (item.stockQuantity > 0){
-	  //   this.items.push(item);
-	  //   }
-	  //   if (!item.salePrice){
-	  //     price = item.price
-	  //   }
-	  //   this.total += price
-	  // },
-	
 	
 	  removeItem: function removeItem(id) {
 	    var items = this.items;
@@ -37062,16 +37087,14 @@
 	
 	var React = __webpack_require__(1);
 	var classNames = __webpack_require__(167);
+	var ShoppingBasket = __webpack_require__(160);
 	
 	var ItemDetail = React.createClass({
 	  displayName: 'ItemDetail',
 	
 	
 	  getInitialState: function getInitialState() {
-	    return {
-	      stockCount: this.props.item.stockQuantity,
-	      numSelected: 0
-	    };
+	    return {};
 	  },
 	
 	  render: function render() {
@@ -37109,7 +37132,7 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'item-button', value: this.props.item, onClick: this.buyThisItem },
+	        { className: 'item-button', value: this.props.item.id, onClick: this.props.buyItem },
 	        'Add to basket'
 	      )
 	    );
@@ -37181,20 +37204,20 @@
 	
 	var React = __webpack_require__(1);
 	var ItemDetail = __webpack_require__(166);
+	var ShoppingBasket = __webpack_require__(160);
 	
 	var ShoppingItemList = React.createClass({
 	  displayName: 'ShoppingItemList',
 	
 	
 	  render: function render() {
-	
 	    var clothing = this.props.items;
 	
 	    var clothingList = clothing.map(function (clothing, index) {
 	      return React.createElement(
 	        'li',
 	        { key: index },
-	        React.createElement(ItemDetail, { key: index, item: clothing, buyThisItem: this.props.buyItem })
+	        React.createElement(ItemDetail, { item: clothing, buyItem: this.props.buyItem })
 	      );
 	    }.bind(this));
 	

@@ -23,16 +23,6 @@ ShoppingBasket.prototype = {
     this.total += price
   }, 
 
-  // add: function(item){
-  //   var price = item.salePrice;
-  //   if (item.stockQuantity > 0){
-  //   this.items.push(item);
-  //   }
-  //   if (!item.salePrice){
-  //     price = item.price
-  //   }
-  //   this.total += price
-  // },
 
 
   removeItem: function( id ) {
