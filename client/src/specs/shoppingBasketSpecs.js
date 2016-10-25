@@ -111,6 +111,13 @@ describe( "ShoppingBasket", function() {
     assert.equal(14.00, shoppingBasket.total);
   })
 
+  it("will not apply discount if basket total requirement not met", function(){
+    shoppingBasket.add(flipFlopsBlue);
+    assert.equal(19.00, shoppingBasket.total);
+    shoppingBasket.checkDiscountValid(fifteenDiscount);
+    assert.equal(19.00, shoppingBasket.total);
+  })
+
 
 
 
