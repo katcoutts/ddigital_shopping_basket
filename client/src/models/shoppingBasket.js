@@ -1,4 +1,6 @@
-var shoppingItem = require( './shopping_item' );
+var shoppingItem = require( './shoppingItem' );
+var discountVoucher = require('./discountVoucher');
+var _ = require('lodash');
 
 var ShoppingBasket = function(){
   this.items = [],

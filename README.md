@@ -1,3 +1,8 @@
+
+Tests for the models can be run from the terminal. From within the client folder type the command:
+$ npm test
+
+
 The prioritised list of user stories is as follows:
 As a User I can view the products and their category, price and availability
 information.
