@@ -34,7 +34,10 @@ ShoppingBasket.prototype = {
         if (!item.salePrice){
           price = item.price
         }
-        this.total -= price
+        this.total -= price;
+        if (this.total < 0){
+          this.total = 0;
+        }
       }
     }  
   },
