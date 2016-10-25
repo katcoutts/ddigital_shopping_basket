@@ -1,9 +1,10 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var ShopBox = require('./components/ShopBox')
 
 window.onload = function(){
   ReactDOM.render(
-    <h1> App Started </h1>,
+    <ShopBox />,
     document.getElementById('app')
   );
 }
