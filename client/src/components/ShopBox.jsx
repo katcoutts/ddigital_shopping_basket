@@ -71,6 +71,12 @@ var ShopBox = React.createClass({
     this.changeElementDisplay('#clothing-list', "inline")
   },
 
+  handleVoucherClick: function(){
+    console.log("handle voucher click has been called");
+    this.changeElementDisplay('#item-basket', 'none');
+    this.changeElementDisplay('#voucher-box', 'inline-block')
+  },
+
   deleteItem: function(event){
     var id = parseInt(event.target.value)
     this.state.shoppingBasket.removeItem(id);
@@ -120,7 +126,7 @@ var ShopBox = React.createClass({
         <button id="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
         </div>
         <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
-        <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick}/>   
+        <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick} clickForVouchers={this.handleVoucherClick}/>   
         <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error}/> 
       </div>
       )

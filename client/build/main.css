@@ -1,10 +1,14 @@
 body{
   font-family: 'Open Sans', sans-serif;
+  width: 100%;
 }
 
 #header{
   color: white;
   background-color: #111;
+  width: 100%;
+  margin-left: -20px;
+  margin-right: -20px;
 }
 
 #dot {

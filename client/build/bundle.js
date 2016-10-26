@@ -19828,6 +19828,12 @@
 	    this.changeElementDisplay('#clothing-list', "inline");
 	  },
 	
+	  handleVoucherClick: function handleVoucherClick() {
+	    console.log("handle voucher click has been called");
+	    this.changeElementDisplay('#item-basket', 'none');
+	    this.changeElementDisplay('#voucher-box', 'inline-block');
+	  },
+	
 	  deleteItem: function deleteItem(event) {
 	    var id = parseInt(event.target.value);
 	    this.state.shoppingBasket.removeItem(id);
@@ -19913,7 +19919,7 @@
 	        )
 	      ),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
-	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem, clickForShop: this.handleShopClick }),
+	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem, clickForShop: this.handleShopClick, clickForVouchers: this.handleVoucherClick }),
 	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error })
 	    );
 	  }
