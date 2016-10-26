@@ -15,6 +15,7 @@ Tests for the models can be run from the terminal. From within the client folder
 $ npm test
 
 The components use shopping basket and stock checker models which are in src -> models and have associated tests in src -> specs.
+The top-level component is ShopBox which is in src -> components.
 
 
 The prioritised list of user stories is as follows:
