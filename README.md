@@ -38,4 +38,7 @@ With further time I would do further work to make the CSS responsive to changing
 Currently you can only use any particular voucher once (if it is valid for your basket) but if your basket meets the overall spend and item requirements you can use more than one different voucher - this can be easily updated depending on what the retailers rules are.
 
 <img width="1180" alt="screen shot 2016-10-26 at 14 41 12" src="https://cloud.githubusercontent.com/assets/17859815/19728212/78acf536-9b8a-11e6-99dd-6685fcdba646.png">
+
 <img width="1209" alt="screen shot 2016-10-26 at 14 41 30" src="https://cloud.githubusercontent.com/assets/17859815/19728249/94bfb59c-9b8a-11e6-96db-292702f94d41.png">
+
+<img width="1188" alt="screen shot 2016-10-26 at 14 41 43" src="https://cloud.githubusercontent.com/assets/17859815/19728291/c77af4d8-9b8a-11e6-886e-af4a2a40ee8c.png">
