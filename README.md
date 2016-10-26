@@ -36,3 +36,5 @@ cart.
 Further extension:
 With further time I would do further work to make the CSS responsive to changing screen size. I would also have a menu along the top for different categories of clothing so the user doesn't see the whole list at one time.
 Currently you can only use any particular voucher once (if it is valid for your basket) but if your basket meets the overall spend and item requirements you can use more than one different voucher - this can be easily updated depending on what the retailers rules are.
+
+<img width="1180" alt="screen shot 2016-10-26 at 14 41 12" src="https://cloud.githubusercontent.com/assets/17859815/19728212/78acf536-9b8a-11e6-99dd-6685fcdba646.png">
