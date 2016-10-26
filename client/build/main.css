@@ -2,6 +2,59 @@ body{
   font-family: 'Open Sans', sans-serif;
 }
 
+#header{
+  color: white;
+  background-color: #111;
+}
+
+#dot {
+  color: rgb(146,212,0);
+}
+
+button{
+  cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
+  /*padding:30px 35px;*/ /*add some padding to the inside of the button*/
+  background: rgb(146,212,0); /*the colour of the button*/
+  border:1px solid #33842a; /*required or the default border for the browser will appear*/
+  /*give the button curved corners, alter the size as required*/
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 5px;
+  /*give the button a drop shadow*/
+  -webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
+  -moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
+  box-shadow: 0 0 4px rgba(0,0,0, .75);
+  /*style the text*/
+  color:#f3f3f3;
+  padding: 1em;
+}
+/***NOW STYLE THE BUTTON'S HOVER AND FOCUS STATES***/
+button:hover {
+  background-color: rgb(146,212,0); /*make the background a little darker*/
+  /*reduce the drop shadow size to give a pushed button effect*/
+  -webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
+  -moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
+  box-shadow: 0 0 1px rgba(0,0,0, .75);
+  color: #aaf;
+  text-shadow: none;
+  -webkit-transition: 500ms linear 0s;
+  -moz-transition: 500ms linear 0s;
+  -o-transition: 500ms linear 0s;
+  transition: 500ms linear 0s;
+  outline: 0 none;
+  color: #fff;
+  text-shadow: -1px 1px 8px #ffc, 1px -1px 8px #fff;
+}
+
+button:focus {
+  outline: none;
+}
+
+#view-basket-button{
+  padding: 2em;
+  margin-right: 1.5em;
+}
+
 #clothingItem {
   border: 1px solid black;
   margin-bottom: 1em;
@@ -9,9 +62,11 @@ body{
   padding-left: 5%;
 }
 
-#heading{
+h1{
   display: inline-block;
   float: left;
+  margin-left: 1.5em;
+  font-size: 3em;
 }
 
 ul{
@@ -32,7 +87,8 @@ button{
 #basket-details{
   display: inline-block;
   margin-top: 1em;
-  margin-left: 30%;
+  margin-left: 20%;
+  color: #d3d3d3;
 }
 
 .item-button{

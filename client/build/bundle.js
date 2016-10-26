@@ -19896,11 +19896,25 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h1',
-	        { id: 'heading' },
-	        'DD\'s Clothing'
+	        'div',
+	        { id: 'header' },
+	        React.createElement(
+	          'h1',
+	          { id: 'heading' },
+	          'D\'s Threads',
+	          React.createElement(
+	            'span',
+	            { id: 'dot' },
+	            '.'
+	          )
+	        ),
+	        React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
+	        React.createElement(
+	          'button',
+	          { id: 'view-basket-button' },
+	          'Go to shopping basket'
+	        )
 	      ),
-	      React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
 	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem }),
 	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error })
@@ -20369,7 +20383,7 @@
 	    React.createElement(
 	      "p",
 	      null,
-	      "Basket"
+	      "Your Basket:"
 	    ),
 	    React.createElement(
 	      "p",

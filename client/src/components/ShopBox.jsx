@@ -116,8 +116,11 @@ var ShopBox = React.createClass({
     
     return (
       <div>
-        <h1 id="heading">DD's Clothing</h1>
+        <div id="header">
+        <h1 id="heading">D's Threads<span id="dot">.</span></h1>
         <BasketBriefDetails items={this.state.itemNumber} total={this.state.shoppingTotal}/>
+        <button id="view-basket-button">Go to shopping basket</button>
+        </div>
         <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
         <BasketList shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem}/>   
         <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error}/> 
