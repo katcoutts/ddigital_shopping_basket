@@ -33,6 +33,7 @@ var ItemDetail = React.createClass({
           <h5 className = {classes2}>Sale Price: £{saleInfo}</h5>
           <h5>In Stock: {inStock}</h5>
         </div>
+        <img src="http://placehold.it/100x100" />
         <button className="item-button" value={this.props.item.id} onClick={this.props.buyItem}>Add to basket</button>
       </div>
   )

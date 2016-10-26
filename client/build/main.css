@@ -8,14 +8,14 @@ body{
 }
 
 #dot {
-  color: rgb(146,212,0);
+  color: rgb(192, 60, 6);
 }
 
 button{
   cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
   /*padding:30px 35px;*/ /*add some padding to the inside of the button*/
-  background: rgb(146,212,0); /*the colour of the button*/
-  border:1px solid #33842a; /*required or the default border for the browser will appear*/
+  background: rgb(192, 60, 6); /*the colour of the button*/
+  border:1px solid rgb(192, 60, 6); /*required or the default border for the browser will appear*/
   /*give the button curved corners, alter the size as required*/
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -33,6 +33,7 @@ button:hover {
   background-color: rgb(146,212,0); /*make the background a little darker*/
   /*reduce the drop shadow size to give a pushed button effect*/
   -webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
+  border:1px solid rgb(146,212,0);
   -moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
   box-shadow: 0 0 1px rgba(0,0,0, .75);
   color: #aaf;
@@ -101,11 +102,13 @@ button{
 }
 
 .salePrice{
-  color: green;
+  color: rgb(146,212,0);
 }
 
 #itemDetails{
   display: inline-block;
+  width: 30%;
+
 }
 
 #basket-remove-button{

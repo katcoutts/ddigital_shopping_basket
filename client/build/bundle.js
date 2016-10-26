@@ -20301,6 +20301,7 @@
 	          inStock
 	        )
 	      ),
+	      React.createElement('img', { src: 'http://placehold.it/100x100' }),
 	      React.createElement(
 	        'button',
 	        { className: 'item-button', value: this.props.item.id, onClick: this.props.buyItem },
