@@ -1,3 +1,7 @@
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
 #clothingItem {
   border: 1px solid black;
   margin-bottom: 1em;
