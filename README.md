@@ -1,4 +1,4 @@
-Deloitte Digital Development Test:
+###Deloitte Digital Development Test:
 
 This project involved the development of website for a clothing retailer.
 
@@ -10,6 +10,11 @@ classnames
 
 If cloning from GitHub you will need to npm install from within the top level folder and within the client folder. To do this type:
 $ npm install
+
+To run this from within the top level folder in the terminal type:
+$ node server.js
+And from within the client folder in the terminal also run:
+$ webpack -w
 
 Tests for the models can be run from the terminal. From within the client folder type the command:
 $ npm test
