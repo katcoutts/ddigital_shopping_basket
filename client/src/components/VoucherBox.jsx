@@ -9,10 +9,20 @@ var VoucherBox = React.createClass({
     }
   },
 
+  checkIfVoucherAlreadyUsed: function(voucher){
+    console.log("voucher", voucher)
+    console.log("discounts already used", this.props.redeemedVouchers)
+    for (var discount of this.props.redeemedVouchers){
+      if (voucher.code === discount.code){
+        return false
+      }
+    }
+    return true
+  },
+
+
   handleVoucherClick: function(){
-    console.log("this handle click in voucher box called")
     var input = document.querySelector('#voucher-input');
-    console.log("input value is", input.value)
     var voucher = null; 
     for (var item of this.props.discountVouchers){
       if(item.code === input.value){
@@ -26,14 +36,19 @@ var VoucherBox = React.createClass({
       element.innerText = "Voucher code not recognised"
       return
     }
-    console.log("voucher is", voucher)
+    if (!this.checkIfVoucherAlreadyUsed(voucher)){
+      var element = document.querySelector('#error-message1');
+      element.innerText = "Voucher already used on this shop"
+      var element2 = document.querySelector('#error-message2');
+      element2.innerText = "";
+      return
+    }
     // debugger;
     this.props.submitVoucher(voucher)
     
   },
 
   componentWillReceiveProps: function(nextProps){
-    console.log("component will receive props called")
     this.setState({
       errorMessage: nextProps.errorMessage
     });
@@ -41,24 +56,23 @@ var VoucherBox = React.createClass({
 
   render: function(){
 
-    console.log("voucherBox", this.props.discountVouchers)
     if (!this.props.discountVouchers){
       return <p></p>
     }
 
     console.log("voucher box error message is", this.props.errorMessage)
-    // var errorMessage = this.state.errorMessage;
-    // if (!this.state.errorMessage){
-    //   errorMessage = "";
-    // }
+
 
     return (
       <div id="voucher-box">
+          <h3>Basket total: £{this.props.total}</h3>
           <h4>Enter voucher code:</h4>
-            <input id="voucher-input" type="text"></input>
-            <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>
-            <h5 id="error-message1"></h5>
-            <h5>{this.state.errorMessage}</h5>
+          <input id="voucher-input" type="text"></input>
+          <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>
+          <h5 id="error-message1"></h5>
+          <h5 id="error-message2">{this.state.errorMessage}</h5>
+          <button>Proceed to payment</button>
+          <button className="second-button" onClick={this.props.basketClick}>Back to basket</button>
       </div>
   )
 }

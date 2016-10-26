@@ -19776,7 +19776,8 @@
 	      itemNumber: 0,
 	      discountVouchers: [],
 	      error: null,
-	      stockChecker: new StockChecker()
+	      stockChecker: new StockChecker(),
+	      redeemedVouchers: []
 	    };
 	  },
 	
@@ -19820,6 +19821,7 @@
 	    console.log("basket button has been clicked");
 	    this.changeElementDisplay("#item-basket", "inline-block");
 	    this.changeElementDisplay('#clothing-list', "none");
+	    this.changeElementDisplay('#voucher-box', 'none');
 	  },
 	
 	  handleShopClick: function handleShopClick() {
@@ -19890,6 +19892,7 @@
 	      return;
 	    }
 	    this.state.shoppingBasket.checkDiscountEligible(voucher);
+	    this.state.redeemedVouchers.push(voucher);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
 	    this.setState({ error: "Voucher accepted" });
 	  },
@@ -19920,7 +19923,7 @@
 	      ),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
 	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem, clickForShop: this.handleShopClick, clickForVouchers: this.handleVoucherClick }),
-	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error })
+	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error, total: this.state.shoppingTotal, basketClick: this.handleBasketClick, redeemedVouchers: this.state.redeemedVouchers })
 	    );
 	  }
 	
@@ -20456,7 +20459,7 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { id: 'second-button', onClick: this.props.clickForVouchers },
+	        { className: 'second-button', onClick: this.props.clickForVouchers },
 	        'Continue to checkout'
 	      )
 	    );
@@ -20591,23 +20594,19 @@
 	    };
 	  },
 	
-	  handleVoucherClick: function handleVoucherClick() {
-	    console.log("this handle click in voucher box called");
-	    var input = document.querySelector('#voucher-input');
-	    console.log("input value is", input.value);
-	    var voucher = null;
+	  checkIfVoucherAlreadyUsed: function checkIfVoucherAlreadyUsed(voucher) {
+	    console.log("voucher", voucher);
+	    console.log("discounts already used", this.props.redeemedVouchers);
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
 	    var _iteratorError = undefined;
 	
 	    try {
-	      for (var _iterator = this.props.discountVouchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var item = _step.value;
+	      for (var _iterator = this.props.redeemedVouchers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var discount = _step.value;
 	
-	        if (item.code === input.value) {
-	          voucher = item;
-	          var element = document.querySelector('#error-message1');
-	          element.innerText = " ";
+	        if (voucher.code === discount.code) {
+	          return false;
 	        }
 	      }
 	    } catch (err) {
@@ -20625,18 +20624,58 @@
 	      }
 	    }
 	
+	    return true;
+	  },
+	
+	  handleVoucherClick: function handleVoucherClick() {
+	    var input = document.querySelector('#voucher-input');
+	    var voucher = null;
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+	
+	    try {
+	      for (var _iterator2 = this.props.discountVouchers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        var item = _step2.value;
+	
+	        if (item.code === input.value) {
+	          voucher = item;
+	          var element = document.querySelector('#error-message1');
+	          element.innerText = " ";
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError2 = true;
+	      _iteratorError2 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	          _iterator2.return();
+	        }
+	      } finally {
+	        if (_didIteratorError2) {
+	          throw _iteratorError2;
+	        }
+	      }
+	    }
+	
 	    if (!voucher) {
 	      var element = document.querySelector('#error-message1');
 	      element.innerText = "Voucher code not recognised";
 	      return;
 	    }
-	    console.log("voucher is", voucher);
+	    if (!this.checkIfVoucherAlreadyUsed(voucher)) {
+	      var element = document.querySelector('#error-message1');
+	      element.innerText = "Voucher already used on this shop";
+	      var element2 = document.querySelector('#error-message2');
+	      element2.innerText = "";
+	      return;
+	    }
 	    // debugger;
 	    this.props.submitVoucher(voucher);
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    console.log("component will receive props called");
 	    this.setState({
 	      errorMessage: nextProps.errorMessage
 	    });
@@ -20644,20 +20683,21 @@
 	
 	  render: function render() {
 	
-	    console.log("voucherBox", this.props.discountVouchers);
 	    if (!this.props.discountVouchers) {
 	      return React.createElement('p', null);
 	    }
 	
 	    console.log("voucher box error message is", this.props.errorMessage);
-	    // var errorMessage = this.state.errorMessage;
-	    // if (!this.state.errorMessage){
-	    //   errorMessage = "";
-	    // }
 	
 	    return React.createElement(
 	      'div',
 	      { id: 'voucher-box' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Basket total: \xA3',
+	        this.props.total
+	      ),
 	      React.createElement(
 	        'h4',
 	        null,
@@ -20672,8 +20712,18 @@
 	      React.createElement('h5', { id: 'error-message1' }),
 	      React.createElement(
 	        'h5',
-	        null,
+	        { id: 'error-message2' },
 	        this.state.errorMessage
+	      ),
+	      React.createElement(
+	        'button',
+	        null,
+	        'Proceed to payment'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'second-button', onClick: this.props.basketClick },
+	        'Back to basket'
 	      )
 	    );
 	  }

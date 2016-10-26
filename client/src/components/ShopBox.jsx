@@ -20,6 +20,7 @@ var ShopBox = React.createClass({
       discountVouchers: [],
       error: null,
       stockChecker: new StockChecker(),
+      redeemedVouchers: []
     }
   },
 
@@ -63,6 +64,7 @@ var ShopBox = React.createClass({
     console.log("basket button has been clicked");
     this.changeElementDisplay("#item-basket", "inline-block");
     this.changeElementDisplay('#clothing-list', "none");
+    this.changeElementDisplay('#voucher-box', 'none');
   },
 
   handleShopClick: function(){
@@ -112,6 +114,7 @@ var ShopBox = React.createClass({
       return
     }
     this.state.shoppingBasket.checkDiscountEligible(voucher);
+    this.state.redeemedVouchers.push(voucher);
     this.setState({shoppingTotal: this.state.shoppingBasket.total});
     this.setState({error: "Voucher accepted"});
   },
@@ -127,7 +130,7 @@ var ShopBox = React.createClass({
         </div>
         <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
         <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick} clickForVouchers={this.handleVoucherClick}/>   
-        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error}/> 
+        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error} total={this.state.shoppingTotal} basketClick={this.handleBasketClick} redeemedVouchers={this.state.redeemedVouchers}/> 
       </div>
       )
   }
