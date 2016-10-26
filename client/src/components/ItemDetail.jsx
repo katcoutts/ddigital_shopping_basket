@@ -4,11 +4,6 @@ var ShoppingBasket = require('../models/shoppingBasket')
 
 var ItemDetail = React.createClass({
 
-  getInitialState: function(){
-    return {
-    }
-  },
-
 
   render: function(){
 

@@ -128,10 +128,12 @@ var ShopBox = React.createClass({
         <BasketBriefDetails id="brief-details" items={this.state.itemNumber} total={this.state.shoppingTotal}/>
         <button className="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
         </div>
-        <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
-        <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick} clickForVouchers={this.handleVoucherClick}/>   
-        <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error} total={this.state.shoppingTotal} basketClick={this.handleBasketClick} redeemedVouchers={this.state.redeemedVouchers}/> 
-        <button id="bottom-button" className="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
+        <div id="body-body">
+          <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
+          <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick} clickForVouchers={this.handleVoucherClick}/>   
+          <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error} total={this.state.shoppingTotal} basketClick={this.handleBasketClick} redeemedVouchers={this.state.redeemedVouchers}/> 
+          <button id="bottom-button" className="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
+        </div>
       </div>
       )
   }

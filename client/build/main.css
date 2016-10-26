@@ -150,3 +150,10 @@ input{
   display: block;
 }
 
+#body-body{
+  margin-left: 3em;
+}
+
+.first-button, .second-button{
+  margin-top: 1.5em;
+}

@@ -26,7 +26,7 @@ var BasketList = React.createClass({
         {boughtList}
       </ul>
       <BasketTotal total={this.props.total} itemNumber = {this.props.items} discountVouchers={this.props.discountVouchers}/>
-      <button onClick={this.props.clickForShop}>Continue shopping</button>
+      <button className="first-button" onClick={this.props.clickForShop}>Continue shopping</button>
       <button className="second-button" onClick={this.props.clickForVouchers}>Continue to checkout</button>
     </div>
   )

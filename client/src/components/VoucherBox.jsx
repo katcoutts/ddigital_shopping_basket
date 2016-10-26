@@ -1,5 +1,5 @@
 var React = require('react');
-var classNames = require('classnames');
+
 
 var VoucherBox = React.createClass({
 
@@ -80,7 +80,7 @@ var VoucherBox = React.createClass({
           <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>
           <h5 id="error-message1"></h5>
           <h5 id="error-message2">{this.state.errorMessage}</h5>
-          <button>Proceed to payment</button>
+          <button className="first-button">Proceed to payment</button>
           <button className="second-button" onClick={this.props.basketClick}>Back to basket</button>
       </div>
   )
