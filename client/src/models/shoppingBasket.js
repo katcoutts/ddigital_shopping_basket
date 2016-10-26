@@ -38,6 +38,7 @@ ShoppingBasket.prototype = {
         if (this.total < 0){
           this.total = 0;
         }
+        return
       }
     }  
   },
