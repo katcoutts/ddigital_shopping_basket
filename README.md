@@ -16,6 +16,8 @@ $ node server.js
 And from within the client folder in the terminal also run:
 $ webpack -w
 
+The app runs on localhost:3000
+
 Tests for the models can be run from the terminal. From within the client folder type the command:
 $ npm test
 
