@@ -32,6 +32,8 @@ var VoucherBox = React.createClass({
     if (!voucher){
       var element = document.querySelector('#error-message1');
       element.innerText = "Voucher code not recognised"
+      var element2 = document.querySelector('#error-message2');
+      element2.innerText = "";
       return
     }
     if (!this.checkIfVoucherAlreadyUsed(voucher)){
@@ -71,8 +73,8 @@ var VoucherBox = React.createClass({
 
     return (
       <div id="voucher-box">
-          <h3>Basket total: £{this.props.total}</h3>
-          <h4>Voucher savings redeemed: £{this.voucherSavingsRedeemed(this.props.redeemedVouchers)}</h4>
+          <h3>Basket total: £{this.props.total.toFixed(2)}</h3>
+          <h4>Voucher savings redeemed: £{this.voucherSavingsRedeemed(this.props.redeemedVouchers).toFixed(2)}</h4>
           <h4>Enter voucher code:</h4>
           <input id="voucher-input" type="text"></input>
           <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>

@@ -20301,7 +20301,7 @@
 	        ),
 	        React.createElement(
 	          'h5',
-	          { className: classes2 },
+	          { id: 'sale-price', className: classes2 },
 	          'Sale Price: \xA3',
 	          saleInfo
 	        ),
@@ -20663,6 +20663,8 @@
 	    if (!voucher) {
 	      var element = document.querySelector('#error-message1');
 	      element.innerText = "Voucher code not recognised";
+	      var element2 = document.querySelector('#error-message2');
+	      element2.innerText = "";
 	      return;
 	    }
 	    if (!this.checkIfVoucherAlreadyUsed(voucher)) {
@@ -20727,13 +20729,13 @@
 	        'h3',
 	        null,
 	        'Basket total: \xA3',
-	        this.props.total
+	        this.props.total.toFixed(2)
 	      ),
 	      React.createElement(
 	        'h4',
 	        null,
 	        'Voucher savings redeemed: \xA3',
-	        this.voucherSavingsRedeemed(this.props.redeemedVouchers)
+	        this.voucherSavingsRedeemed(this.props.redeemedVouchers).toFixed(2)
 	      ),
 	      React.createElement(
 	        'h4',

@@ -115,6 +115,7 @@ button{
   color: rgb(146,212,0);
 }
 
+
 #item-basket, #voucher-box{
   display: none;
 }
@@ -148,3 +149,4 @@ input{
   margin-left: 0;
   display: block;
 }
+

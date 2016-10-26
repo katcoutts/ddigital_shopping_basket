@@ -19,6 +19,7 @@ var ItemDetail = React.createClass({
       var classes2 = classNames("salePrice")
     }
 
+
     var inStock = "Yes";
     if(!this.props.item.stockQuantity){
       inStock = "No";
@@ -30,7 +31,7 @@ var ItemDetail = React.createClass({
           <h4 id={this.props.item.id}>{this.props.item.name}</h4>
           <h5>Colour: {this.props.item.colour}</h5>
           <h5 className = {classes} >Price: £{this.props.item.price.toFixed(2)}</h5>
-          <h5 className = {classes2}>Sale Price: £{saleInfo}</h5>
+          <h5 id = "sale-price" className = {classes2}>Sale Price: £{saleInfo}</h5>
           <h5>In Stock: {inStock}</h5>
         </div>
         <img src="http://placehold.it/100x100" />
