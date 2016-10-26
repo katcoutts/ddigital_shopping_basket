@@ -39,5 +39,9 @@ describe( "StockChecker", function() {
       assert.equal(3, stockChecker.findStockCount(9));
     })
 
+    it("can reduce stock quantity", function(){
+      stockChecker.reduceStockQuantity(9);
+      assert.equal(2, stockChecker.findStockCount(9));
+    })
 
 })
