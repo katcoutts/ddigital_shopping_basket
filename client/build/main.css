@@ -61,7 +61,7 @@ button:focus {
   outline: none;
 }
 
-#view-basket-button{
+.view-basket-button{
   padding: 2em;
   position: absolute;
   margin-left: 3em;

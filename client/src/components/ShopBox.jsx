@@ -61,22 +61,22 @@ var ShopBox = React.createClass({
   },
 
   handleBasketClick: function(){
-    console.log("basket button has been clicked");
     this.changeElementDisplay("#item-basket", "inline-block");
     this.changeElementDisplay('#clothing-list', "none");
     this.changeElementDisplay('#voucher-box', 'none');
+    this.changeElementDisplay('#bottom-button', 'none')
   },
 
   handleShopClick: function(){
-    console.log("handle shop click has been called")
     this.changeElementDisplay("#item-basket", "none");
     this.changeElementDisplay('#clothing-list', "inline")
+    this.changeElementDisplay('#bottom-button', 'block')
   },
 
   handleVoucherClick: function(){
-    console.log("handle voucher click has been called");
     this.changeElementDisplay('#item-basket', 'none');
     this.changeElementDisplay('#voucher-box', 'inline-block')
+    this.changeElementDisplay('#bottom-button', 'none')
   },
 
   deleteItem: function(event){
@@ -126,11 +126,12 @@ var ShopBox = React.createClass({
         <div id="header">
         <h1 id="heading">D's Threads<span id="dot">.</span></h1>
         <BasketBriefDetails id="brief-details" items={this.state.itemNumber} total={this.state.shoppingTotal}/>
-        <button id="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
+        <button className="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
         </div>
         <ShoppingItemList buyItem={this.buyItem} items = {this.state.shoppingItems}/>
         <BasketList  shoppingBasket={this.state.shoppingBasket} items={this.state.itemNumber} total={this.state.shoppingTotal} discountVouchers={this.state.discountVouchers} removeItem={this.deleteItem} clickForShop={this.handleShopClick} clickForVouchers={this.handleVoucherClick}/>   
         <VoucherBox discountVouchers={this.state.discountVouchers} submitVoucher={this.handleVoucher} errorMessage={this.state.error} total={this.state.shoppingTotal} basketClick={this.handleBasketClick} redeemedVouchers={this.state.redeemedVouchers}/> 
+        <button id="bottom-button" className="view-basket-button" onClick={this.handleBasketClick}>View shopping basket</button>
       </div>
       )
   }

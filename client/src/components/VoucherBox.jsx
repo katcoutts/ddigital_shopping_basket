@@ -54,6 +54,14 @@ var VoucherBox = React.createClass({
     });
   },
 
+  voucherSavingsRedeemed: function(vouchers){
+    var total = 0;
+    for (var voucher of this.props.redeemedVouchers){
+      total += voucher.discountAmount;
+    }
+    return total;
+  },
+
   render: function(){
 
     if (!this.props.discountVouchers){
@@ -66,6 +74,7 @@ var VoucherBox = React.createClass({
     return (
       <div id="voucher-box">
           <h3>Basket total: £{this.props.total}</h3>
+          <h4>Voucher savings redeemed: £{this.voucherSavingsRedeemed(this.props.redeemedVouchers)}</h4>
           <h4>Enter voucher code:</h4>
           <input id="voucher-input" type="text"></input>
           <button id="voucher-submit-button" onClick={this.handleVoucherClick}>Submit</button>

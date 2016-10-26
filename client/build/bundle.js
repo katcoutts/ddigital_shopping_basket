@@ -19818,22 +19818,22 @@
 	  },
 	
 	  handleBasketClick: function handleBasketClick() {
-	    console.log("basket button has been clicked");
 	    this.changeElementDisplay("#item-basket", "inline-block");
 	    this.changeElementDisplay('#clothing-list', "none");
 	    this.changeElementDisplay('#voucher-box', 'none');
+	    this.changeElementDisplay('#bottom-button', 'none');
 	  },
 	
 	  handleShopClick: function handleShopClick() {
-	    console.log("handle shop click has been called");
 	    this.changeElementDisplay("#item-basket", "none");
 	    this.changeElementDisplay('#clothing-list', "inline");
+	    this.changeElementDisplay('#bottom-button', 'block');
 	  },
 	
 	  handleVoucherClick: function handleVoucherClick() {
-	    console.log("handle voucher click has been called");
 	    this.changeElementDisplay('#item-basket', 'none');
 	    this.changeElementDisplay('#voucher-box', 'inline-block');
+	    this.changeElementDisplay('#bottom-button', 'none');
 	  },
 	
 	  deleteItem: function deleteItem(event) {
@@ -19917,13 +19917,18 @@
 	        React.createElement(BasketBriefDetails, { id: 'brief-details', items: this.state.itemNumber, total: this.state.shoppingTotal }),
 	        React.createElement(
 	          'button',
-	          { id: 'view-basket-button', onClick: this.handleBasketClick },
+	          { className: 'view-basket-button', onClick: this.handleBasketClick },
 	          'View shopping basket'
 	        )
 	      ),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
 	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem, clickForShop: this.handleShopClick, clickForVouchers: this.handleVoucherClick }),
-	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error, total: this.state.shoppingTotal, basketClick: this.handleBasketClick, redeemedVouchers: this.state.redeemedVouchers })
+	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error, total: this.state.shoppingTotal, basketClick: this.handleBasketClick, redeemedVouchers: this.state.redeemedVouchers }),
+	      React.createElement(
+	        'button',
+	        { id: 'bottom-button', className: 'view-basket-button', onClick: this.handleBasketClick },
+	        'View shopping basket'
+	      )
 	    );
 	  }
 	
@@ -20681,6 +20686,36 @@
 	    });
 	  },
 	
+	  voucherSavingsRedeemed: function voucherSavingsRedeemed(vouchers) {
+	    var total = 0;
+	    var _iteratorNormalCompletion3 = true;
+	    var _didIteratorError3 = false;
+	    var _iteratorError3 = undefined;
+	
+	    try {
+	      for (var _iterator3 = this.props.redeemedVouchers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	        var voucher = _step3.value;
+	
+	        total += voucher.discountAmount;
+	      }
+	    } catch (err) {
+	      _didIteratorError3 = true;
+	      _iteratorError3 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	          _iterator3.return();
+	        }
+	      } finally {
+	        if (_didIteratorError3) {
+	          throw _iteratorError3;
+	        }
+	      }
+	    }
+	
+	    return total;
+	  },
+	
 	  render: function render() {
 	
 	    if (!this.props.discountVouchers) {
@@ -20697,6 +20732,12 @@
 	        null,
 	        'Basket total: \xA3',
 	        this.props.total
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Voucher savings redeemed: \xA3',
+	        this.voucherSavingsRedeemed(this.props.redeemedVouchers)
 	      ),
 	      React.createElement(
 	        'h4',
