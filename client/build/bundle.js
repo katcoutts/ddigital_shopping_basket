@@ -37411,6 +37411,7 @@
 	    var inStock = "Yes";
 	    if (!this.props.item.stockQuantity) {
 	      inStock = "No";
+	      var classes3 = classNames("out-of-stock");
 	    }
 	
 	    return React.createElement(
@@ -37444,7 +37445,7 @@
 	        ),
 	        React.createElement(
 	          'h5',
-	          null,
+	          { className: classes3 },
 	          'In Stock: ',
 	          inStock
 	        )

@@ -21,6 +21,10 @@ body{
   background-color: red;
 }
 
+.out-of-stock{
+  color: red;
+}
+
 button{
   cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
   /*padding:30px 35px;*/ /*add some padding to the inside of the button*/
