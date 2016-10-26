@@ -20,12 +20,14 @@ var BasketList = React.createClass({
 
     
   return(
-    <div className='item-basket'>
+    <div id='item-basket'>
       <h2>Shopping Basket</h2>
       <ul>
         {boughtList}
       </ul>
       <BasketTotal total={this.props.total} itemNumber = {this.props.items} discountVouchers={this.props.discountVouchers}/>
+      <button onClick={this.props.clickForShop}>Continue shopping</button>
+      <button id="second-button" onClick={this.props.clickForVouchers}>Continue to checkout</button>
     </div>
   )
   }

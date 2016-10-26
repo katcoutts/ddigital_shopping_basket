@@ -16,7 +16,7 @@ var ShoppingItemList = React.createClass({
     }.bind(this))
 
   return(
-    <div className='clothing-list'>
+    <div id='clothing-list'>
       <ul>
         {clothingList}
       </ul>

@@ -19763,7 +19763,6 @@
 	var BasketBriefDetails = __webpack_require__(166);
 	var BasketList = __webpack_require__(167);
 	var VoucherBox = __webpack_require__(170);
-	var _ = __webpack_require__(171);
 	
 	var ShopBox = React.createClass({
 	  displayName: 'ShopBox',
@@ -19793,12 +19792,9 @@
 	    var request = new XMLHttpRequest();
 	    request.open('GET', url);
 	    request.onload = function () {
-	      console.log(request.responseText);
 	      var data = JSON.parse(request.responseText);
 	      this.setState({ shoppingItems: data });
-	      console.log("stock checker", this.state.stockChecker);
 	      this.state.stockChecker.addStockItems(data);
-	      console.log("stock checker after added stock", this.state.stockChecker);
 	    }.bind(this);
 	    request.send();
 	  },
@@ -19815,25 +19811,33 @@
 	    request.send();
 	  },
 	
+	  changeElementDisplay: function changeElementDisplay(element, display) {
+	    var element = document.querySelector(element);
+	    element.style.display = display;
+	  },
+	
+	  handleBasketClick: function handleBasketClick() {
+	    console.log("basket button has been clicked");
+	    this.changeElementDisplay("#item-basket", "inline-block");
+	    this.changeElementDisplay('#clothing-list', "none");
+	  },
+	
+	  handleShopClick: function handleShopClick() {
+	    console.log("handle shop click has been called");
+	    this.changeElementDisplay("#item-basket", "none");
+	    this.changeElementDisplay('#clothing-list', "inline");
+	  },
+	
 	  deleteItem: function deleteItem(event) {
-	    console.log("removeitem called");
-	    console.log("remove event", event.target.value);
-	    console.log("shopping basket", this.state.shoppingBasket);
-	    console.log("id to number", parseInt(event.target.value));
 	    var id = parseInt(event.target.value);
 	    this.state.shoppingBasket.removeItem(id);
 	    this.state.stockChecker.increaseStockQuantity(id);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
 	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
-	    console.log("shoppingbasket", this.state.shoppingBasket);
 	  },
 	
 	  buyItem: function buyItem(event) {
-	    console.log("event", event);
-	    console.log("shopping items", this.state.shoppingItems);
-	    console.log("i am the stock checker", this.state.stockChecker);
 	    var id = parseInt(event.target.value);
-	    console.log("i am the stock checker checking the stock count", this.state.stockChecker.findStockCount(id));
 	    if (!this.state.stockChecker.findStockCount(id)) {
 	      return;
 	    }
@@ -19865,18 +19869,13 @@
 	      }
 	    }
 	
-	    console.log('item to buy, ', item);
 	    this.state.shoppingBasket.add(item);
 	    this.state.stockChecker.reduceStockQuantity(id);
-	    // debugger;
-	    console.log("buy item called in shop", this.state.shoppingBasket);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
 	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
 	  },
 	
 	  handleVoucher: function handleVoucher(voucher) {
-	    console.log("this.state.total", this.state.total);
-	    console.log("voucher.priceLimit", voucher.priceLimit);
 	    if (this.state.shoppingTotal < voucher.priceLimit) {
 	      this.setState({ error: "You have not spent enough to redeem this voucher" });
 	      return;
@@ -19887,11 +19886,9 @@
 	    this.state.shoppingBasket.checkDiscountEligible(voucher);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
 	    this.setState({ error: "Voucher accepted" });
-	    console.log("error message in shop box is", this.state.error);
 	  },
 	
 	  render: function render() {
-	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -19908,15 +19905,15 @@
 	            '.'
 	          )
 	        ),
-	        React.createElement(BasketBriefDetails, { items: this.state.itemNumber, total: this.state.shoppingTotal }),
+	        React.createElement(BasketBriefDetails, { id: 'brief-details', items: this.state.itemNumber, total: this.state.shoppingTotal }),
 	        React.createElement(
 	          'button',
-	          { id: 'view-basket-button' },
-	          'Go to shopping basket'
+	          { id: 'view-basket-button', onClick: this.handleBasketClick },
+	          'View shopping basket'
 	        )
 	      ),
 	      React.createElement(ShoppingItemList, { buyItem: this.buyItem, items: this.state.shoppingItems }),
-	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem }),
+	      React.createElement(BasketList, { shoppingBasket: this.state.shoppingBasket, items: this.state.itemNumber, total: this.state.shoppingTotal, discountVouchers: this.state.discountVouchers, removeItem: this.deleteItem, clickForShop: this.handleShopClick }),
 	      React.createElement(VoucherBox, { discountVouchers: this.state.discountVouchers, submitVoucher: this.handleVoucher, errorMessage: this.state.error })
 	    );
 	  }
@@ -20220,7 +20217,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'clothing-list' },
+	      { id: 'clothing-list' },
 	      React.createElement(
 	        'ul',
 	        null,
@@ -20434,7 +20431,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'item-basket' },
+	      { id: 'item-basket' },
 	      React.createElement(
 	        'h2',
 	        null,
@@ -20445,7 +20442,17 @@
 	        null,
 	        boughtList
 	      ),
-	      React.createElement(BasketTotal, { total: this.props.total, itemNumber: this.props.items, discountVouchers: this.props.discountVouchers })
+	      React.createElement(BasketTotal, { total: this.props.total, itemNumber: this.props.items, discountVouchers: this.props.discountVouchers }),
+	      React.createElement(
+	        'button',
+	        { onClick: this.props.clickForShop },
+	        'Continue shopping'
+	      ),
+	      React.createElement(
+	        'button',
+	        { id: 'second-button', onClick: this.props.clickForVouchers },
+	        'Continue to checkout'
+	      )
 	    );
 	  }
 	

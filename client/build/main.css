@@ -11,6 +11,12 @@ body{
   color: rgb(192, 60, 6);
 }
 
+.selected{
+  display: none;
+  color: red;
+  background-color: red;
+}
+
 button{
   cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
   /*padding:30px 35px;*/ /*add some padding to the inside of the button*/
@@ -30,10 +36,10 @@ button{
 }
 /***NOW STYLE THE BUTTON'S HOVER AND FOCUS STATES***/
 button:hover {
-  background-color: rgb(146,212,0); /*make the background a little darker*/
+  background-color: rgb(175, 54, 7); /*make the background a little darker*/
   /*reduce the drop shadow size to give a pushed button effect*/
   -webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
-  border:1px solid rgb(146,212,0);
+  border:1px solid rgb(175, 54, 7);
   -moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
   box-shadow: 0 0 1px rgba(0,0,0, .75);
   color: #aaf;
@@ -105,10 +111,18 @@ button{
   color: rgb(146,212,0);
 }
 
+#item-basket, #voucher-box{
+  display: none;
+}
+
 #itemDetails{
   display: inline-block;
   width: 30%;
 
+}
+
+#second-button{
+  margin-left: 3em;
 }
 
 #basket-remove-button{
