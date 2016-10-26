@@ -10,7 +10,6 @@ StockChecker.prototype = {
     }
   },
 
-  // TO REFACTOR - horrid repetition here = bring out the for loop into a separate function called getItem and then these three ones just call that.
 
   findStockCount: function(id){
     var chosenItem;

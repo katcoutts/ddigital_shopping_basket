@@ -20494,8 +20494,6 @@
 	
 	  render: function render() {
 	
-	    console.log("basket item detail", this.props.item);
-	
 	    var cost = this.props.item.price;
 	    if (this.props.item.salePrice) {
 	      cost = this.props.item.salePrice;
@@ -20600,8 +20598,6 @@
 	  },
 	
 	  checkIfVoucherAlreadyUsed: function checkIfVoucherAlreadyUsed(voucher) {
-	    console.log("voucher", voucher);
-	    console.log("discounts already used", this.props.redeemedVouchers);
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
 	    var _iteratorError = undefined;
@@ -37816,8 +37812,6 @@
 	      }
 	    }
 	  },
-	
-	  // TO REFACTOR - horrid repetition here = bring out the for loop into a separate function called getItem and then these three ones just call that.
 	
 	  findStockCount: function findStockCount(id) {
 	    var chosenItem;

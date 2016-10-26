@@ -12,8 +12,6 @@ var BasketItemDetail = React.createClass({
 
   render: function(){
 
-    console.log("basket item detail", this.props.item)
-
     var cost = this.props.item.price;
     if (this.props.item.salePrice){
       cost = this.props.item.salePrice;

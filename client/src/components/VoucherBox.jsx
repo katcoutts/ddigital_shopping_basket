@@ -10,8 +10,6 @@ var VoucherBox = React.createClass({
   },
 
   checkIfVoucherAlreadyUsed: function(voucher){
-    console.log("voucher", voucher)
-    console.log("discounts already used", this.props.redeemedVouchers)
     for (var discount of this.props.redeemedVouchers){
       if (voucher.code === discount.code){
         return false
