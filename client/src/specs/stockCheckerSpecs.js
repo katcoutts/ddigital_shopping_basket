@@ -35,4 +35,9 @@ describe( "StockChecker", function() {
       assert.equal(2, stockChecker.items.length);
     })
 
+    it("can return stock quantity", function(){
+      assert.equal(3, stockChecker.findStockCount(9));
+    })
+
+
 })
