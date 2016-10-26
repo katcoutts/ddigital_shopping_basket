@@ -38,6 +38,9 @@ var ShopBox = React.createClass({
       console.log(request.responseText);
       var data = JSON.parse(request.responseText);
       this.setState({ shoppingItems: data});
+      console.log("stock checker", this.state.stockChecker)
+      this.state.stockChecker.addStockItems(data);
+      console.log("stock checker after added stock", this.state.stockChecker)
     }.bind(this);
     request.send();
   },
@@ -61,6 +64,7 @@ var ShopBox = React.createClass({
     console.log("id to number", parseInt(event.target.value))
     var id = parseInt(event.target.value)
     this.state.shoppingBasket.removeItem(id);
+    this.state.stockChecker.increaseStockQuantity(id);
     this.setState({shoppingTotal: this.state.shoppingBasket.total});
     this.setState({itemNumber: this.state.shoppingBasket.items.length});
     console.log("shoppingbasket", this.state.shoppingBasket)
@@ -69,6 +73,12 @@ var ShopBox = React.createClass({
   buyItem: function(event){
     console.log("event", event)
     console.log("shopping items", this.state.shoppingItems)
+    console.log("i am the stock checker", this.state.stockChecker)
+    var id = parseInt(event.target.value);
+    console.log("i am the stock checker checking the stock count", this.state.stockChecker.findStockCount(id))
+    if (!this.state.stockChecker.findStockCount(id)){
+      return 
+    }
     var item
     for (var shoppingItem of this.state.shoppingItems){
       if (shoppingItem.id.toString() === event.target.value){
@@ -77,6 +87,7 @@ var ShopBox = React.createClass({
     }
     console.log('item to buy, ', item)
     this.state.shoppingBasket.add(item);
+    this.state.stockChecker.reduceStockQuantity(id);
     // debugger;
     console.log("buy item called in shop", this.state.shoppingBasket);
     this.setState({shoppingTotal: this.state.shoppingBasket.total});

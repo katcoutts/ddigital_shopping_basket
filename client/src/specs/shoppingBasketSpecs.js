@@ -79,7 +79,7 @@ describe( "ShoppingBasket", function() {
       "price": 75.00,
       "salePrice": null,
       "stockQuantity": 2
-    })
+    });
   })
 
   it("should start empty", function(){

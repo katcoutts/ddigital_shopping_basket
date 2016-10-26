@@ -19796,6 +19796,9 @@
 	      console.log(request.responseText);
 	      var data = JSON.parse(request.responseText);
 	      this.setState({ shoppingItems: data });
+	      console.log("stock checker", this.state.stockChecker);
+	      this.state.stockChecker.addStockItems(data);
+	      console.log("stock checker after added stock", this.state.stockChecker);
 	    }.bind(this);
 	    request.send();
 	  },
@@ -19819,6 +19822,7 @@
 	    console.log("id to number", parseInt(event.target.value));
 	    var id = parseInt(event.target.value);
 	    this.state.shoppingBasket.removeItem(id);
+	    this.state.stockChecker.increaseStockQuantity(id);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
 	    this.setState({ itemNumber: this.state.shoppingBasket.items.length });
 	    console.log("shoppingbasket", this.state.shoppingBasket);
@@ -19827,6 +19831,12 @@
 	  buyItem: function buyItem(event) {
 	    console.log("event", event);
 	    console.log("shopping items", this.state.shoppingItems);
+	    console.log("i am the stock checker", this.state.stockChecker);
+	    var id = parseInt(event.target.value);
+	    console.log("i am the stock checker checking the stock count", this.state.stockChecker.findStockCount(id));
+	    if (!this.state.stockChecker.findStockCount(id)) {
+	      return;
+	    }
 	    var item;
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
@@ -19857,6 +19867,7 @@
 	
 	    console.log('item to buy, ', item);
 	    this.state.shoppingBasket.add(item);
+	    this.state.stockChecker.reduceStockQuantity(id);
 	    // debugger;
 	    console.log("buy item called in shop", this.state.shoppingBasket);
 	    this.setState({ shoppingTotal: this.state.shoppingBasket.total });
@@ -37686,6 +37697,8 @@
 	    }
 	  },
 	
+	  // TO REFACTOR - horrid repetition here = bring out the for loop into a separate function called getItem and then these three ones just call that.
+	
 	  findStockCount: function findStockCount(id) {
 	    var chosenItem;
 	    var _iteratorNormalCompletion2 = true;
@@ -37741,6 +37754,35 @@
 	      } finally {
 	        if (_didIteratorError3) {
 	          throw _iteratorError3;
+	        }
+	      }
+	    }
+	  },
+	
+	  increaseStockQuantity: function increaseStockQuantity(id) {
+	    var _iteratorNormalCompletion4 = true;
+	    var _didIteratorError4 = false;
+	    var _iteratorError4 = undefined;
+	
+	    try {
+	      for (var _iterator4 = this.items[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	        var item = _step4.value;
+	
+	        if (item.id === id) {
+	          item.stockQuantity += 1;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError4 = true;
+	      _iteratorError4 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	          _iterator4.return();
+	        }
+	      } finally {
+	        if (_didIteratorError4) {
+	          throw _iteratorError4;
 	        }
 	      }
 	    }
