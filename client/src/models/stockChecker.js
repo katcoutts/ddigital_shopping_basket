@@ -1,8 +1,14 @@
 var StockChecker = function(items){
-  this.items = items;
+  this.items = items || [];
 }
 
 StockChecker.prototype = {
+
+  addStockItems: function(items){
+    for (var item of items){
+      this.items.push(item);
+    }
+  },
 
   findStockCount: function(id){
     var chosenItem;

@@ -44,4 +44,29 @@ describe( "StockChecker", function() {
       assert.equal(2, stockChecker.findStockCount(9));
     })
 
+    it("can add items", function(){
+      stockChecker.addStockItems([{
+       "id": 4,
+       "name": "Flip Flops",
+       "colour": "Red",
+       "category": "Men's Footwear",
+       "type": "footwear",
+       "gender": "men",
+       "price": 19.00,
+       "salePrice": null,
+       "stockQuantity": 6
+    },
+   {
+      "id": 5,
+      "name": "Flip Flops",
+      "colour": "Blue",
+      "category": "Men's Footwear",
+      "type": "footwear",
+      "gender": "men",
+      "price": 19.00,
+      "salePrice": null,
+      "stockQuantity": 0
+    }])
+      assert.equal(4, stockChecker.items.length)
+    })
 })

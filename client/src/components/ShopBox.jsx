@@ -2,10 +2,11 @@ var React = require('react');
 var ShoppingBasket = require('../models/shoppingBasket');
 var ShoppingItem = require('../models/shoppingItem');
 var DiscountVoucher = require('../models/discountVoucher');
+var StockChecker = require('../models/stockChecker');
 var ShoppingItemList = require('./ShoppingItemList');
 var BasketBriefDetails = require('./BasketBriefDetails');
 var BasketList = require('./BasketList');
-var VoucherBox = require('./VoucherBox')
+var VoucherBox = require('./VoucherBox');
 var _ = require('lodash');
 
 var ShopBox = React.createClass({
@@ -17,7 +18,8 @@ var ShopBox = React.createClass({
       shoppingTotal: 0,
       itemNumber: 0,
       discountVouchers: [],
-      error: null
+      error: null,
+      stockChecker: new StockChecker()
     }
   },
 

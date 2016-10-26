@@ -19758,6 +19758,7 @@
 	var ShoppingBasket = __webpack_require__(160);
 	var ShoppingItem = __webpack_require__(161);
 	var DiscountVoucher = __webpack_require__(162);
+	var StockChecker = __webpack_require__(173);
 	var ShoppingItemList = __webpack_require__(163);
 	var BasketBriefDetails = __webpack_require__(166);
 	var BasketList = __webpack_require__(167);
@@ -19775,7 +19776,8 @@
 	      shoppingTotal: 0,
 	      itemNumber: 0,
 	      discountVouchers: [],
-	      error: null
+	      error: null,
+	      stockChecker: new StockChecker()
 	    };
 	  },
 	
@@ -37644,6 +37646,109 @@
 		return module;
 	}
 
+
+/***/ },
+/* 173 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var StockChecker = function StockChecker(items) {
+	  this.items = items || [];
+	};
+	
+	StockChecker.prototype = {
+	
+	  addStockItems: function addStockItems(items) {
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var item = _step.value;
+	
+	        this.items.push(item);
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	  },
+	
+	  findStockCount: function findStockCount(id) {
+	    var chosenItem;
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+	
+	    try {
+	      for (var _iterator2 = this.items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        var item = _step2.value;
+	
+	        if (item.id === id) {
+	          chosenItem = item;
+	          return chosenItem.stockQuantity;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError2 = true;
+	      _iteratorError2 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	          _iterator2.return();
+	        }
+	      } finally {
+	        if (_didIteratorError2) {
+	          throw _iteratorError2;
+	        }
+	      }
+	    }
+	  },
+	
+	  reduceStockQuantity: function reduceStockQuantity(id) {
+	    var _iteratorNormalCompletion3 = true;
+	    var _didIteratorError3 = false;
+	    var _iteratorError3 = undefined;
+	
+	    try {
+	      for (var _iterator3 = this.items[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	        var item = _step3.value;
+	
+	        if (item.id === id) {
+	          item.stockQuantity -= 1;
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError3 = true;
+	      _iteratorError3 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	          _iterator3.return();
+	        }
+	      } finally {
+	        if (_didIteratorError3) {
+	          throw _iteratorError3;
+	        }
+	      }
+	    }
+	  }
+	
+	};
+	
+	module.exports = StockChecker;
 
 /***/ }
 /******/ ]);
