@@ -39,6 +39,11 @@ with discounts applied.
 cart.
 7. As a User I am unable to add Out of Stock products to the shopping cart.
 
+Note - for the use of vouchers there is currently one valid voucher code:
+5-OFF (gives the shopper £5 off their basket)
+10-OFF (gives the shopper £10 off if their basket is worth more than £50)
+15-OFF (gives the shopper £15 off if their basket is worth more than £75 and they have bought some footwear.)
+
 
 Further extension:
 With further time I would do further work to make the CSS responsive to changing screen size. I would also have a menu along the top for different categories of clothing so the user doesn't see the whole list at one time.
