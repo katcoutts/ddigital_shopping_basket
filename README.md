@@ -1,4 +1,4 @@
-###Deloitte Digital Development Test:
+#Deloitte Digital Development Test:
 
 This project involved the development of a website for a clothing retailer.
 
@@ -8,22 +8,35 @@ Express
 Mocha (testing framework)
 classnames
 
+##Running
+
 If cloning from GitHub you will need to npm install from within the top level folder and within the client folder. To do this type:
+
 $ npm install
 
 To run this from within the top level folder in the terminal type:
+
 $ node server.js
+
 And from within the client folder in the terminal also run:
+
 $ webpack -w
 
 The app runs on localhost:3000
 
+### Running tests
+
 Tests for the models can be run from the terminal. From within the client folder type the command:
+
 $ npm test
 
+###Models and Components
+
 The components use shopping basket and stock checker models which are in src -> models and have associated tests in src -> specs.
+
 The top-level component is ShopBox which is in src -> components.
 
+##User Stories
 
 The prioritised list of user stories is as follows:
 As a User I can view the products and their category, price and availability
@@ -39,13 +52,14 @@ with discounts applied.
 cart.
 7. As a User I am unable to add Out of Stock products to the shopping cart.
 
+###Vouchers
 Note - for the use of vouchers there is currently one valid voucher code:
 5-OFF (gives the shopper £5 off their basket)
 10-OFF (gives the shopper £10 off if their basket is worth more than £50)
 15-OFF (gives the shopper £15 off if their basket is worth more than £75 and they have bought some footwear.)
 
 
-Further extension:
+###Further extension:
 With further time I would do further work to make the CSS responsive to changing screen size. I would also have a menu along the top for different categories of clothing so the user doesn't see the whole list at one time.
 Currently you can only use any particular voucher once (if it is valid for your basket) but if your basket meets the overall spend and item requirements you can use more than one different voucher - this can be easily updated depending on what the retailers rules are.
 
